@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-//coord: ri, forces: fi
+//coordinates: ri, forces: fi
 //virial term: used to calculated the pressure in the system. Provides a measure of the internal forces acting
 double potential_energy(double *Rx, double *Ry, double *Rz, 
                     double *Fx, double *Fy, double *Fz, 
@@ -19,9 +19,9 @@ double potential_energy(double *Rx, double *Ry, double *Rz,
     }
     *vir = 0.0;
 
-    //distance between particle i and j
     for(int i=0; i<N; i++){
         for(int j=i+1; j<N; j++){
+            //distance between particle i and j
             dx = Rx[i] - Rx[j];
             dy = Ry[i] - Ry[j];
             dz = Rz[i] - Rz[j];
@@ -57,7 +57,6 @@ double potential_energy(double *Rx, double *Ry, double *Rz,
         }
     }
     return pot_energy + N*e_cut; //potential energy 
-
 }
 
 int main(){
