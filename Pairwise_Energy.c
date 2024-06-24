@@ -59,12 +59,3 @@ double potential_energy(double *Rx, double *Ry, double *Rz,
     return pot_energy + N*e_cut; //potential energy 
 }
 
-int main(){
-    
-    
-
-
-
-
-
-}

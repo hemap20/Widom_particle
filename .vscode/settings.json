@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "iosfwd": "c",
+        "POSCAR_to_CONTCAR.C": "cpp",
+        "vector": "cpp"
+    }
+}
