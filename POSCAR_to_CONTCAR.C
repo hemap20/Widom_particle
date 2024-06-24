@@ -12,7 +12,7 @@ int main(){
     double box_dim[3][3] = {0}; //Lx, Ly, Lz
 
     
-    std::ifstream input("POSCAR");
+    std::ifstream input("/workspaces/Basics/POSCAR");
 
     std::getline(input, line);   //KCl
     std::istringstream atoms(line);
