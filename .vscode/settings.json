@@ -2,6 +2,8 @@
     "files.associations": {
         "iosfwd": "c",
         "POSCAR_to_CONTCAR.C": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "POS_to_CONT_2.C": "cpp",
+        "POS_to_CONT.C": "cpp"
     }
 }
