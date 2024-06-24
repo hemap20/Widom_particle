@@ -9,7 +9,7 @@ void info_out (FILE * fp,
 	      int N, int put_vel, int unfold) {
     int i;
 
-    //Print number of particles and velocity flag
+    //Print number of particles
     fprintf(fp,"%i\n",N);
 
     //Print the simulation box dimensions
@@ -47,12 +47,14 @@ int info_in (FILE * fp, double * rx, double * ry, double * rz,
     //Read number of particles and velocity flag from file
     if (fscanf(fp, "%i %i\n", N, &has_vel) != EOF) {
         //Read box dimensions
+        //dummy to discard the BOX string
         i = fscanf(fp, "%s %lf %lf %lf\n", dummy, &Lx, &Ly, &Lz);
         *L = Lx;
 
         //Loop over each particle
         for (i = 0; i < (*N); i++) {
         //Read particle identifier and coordinates
+        //dum used to discard atomic number
         l = fscanf(fp, "%i %lf %lf %lf ", &dum, &rx[i], &ry[i], &rz[i]);
 
         //If velocities are included, read them
