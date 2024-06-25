@@ -8,7 +8,7 @@ using namespace std;
 
 void print_CONTCAR(const string& filename, const vector<string>& atom_name, int n_atom_types, int total_n_atoms,
                 double value, const vector<vector<double>>& box_dim, const vector<int>& n_atoms_per_type,
-                const string& coordinate_sys, const vector<vector<double>>& positions, vector<double>& distances) {
+                const string& coordinate_sys, const vector<vector<double>>& positions) {
     
     ofstream output(filename);
 
@@ -45,11 +45,6 @@ void print_CONTCAR(const string& filename, const vector<string>& atom_name, int 
         output << positions[i][0] << " " << positions[i][1] << " " << positions[i][2] << endl;
     }
     output << endl;
-
-    //print the distances 
-    for(int i=0; i<total_n_atoms; i++) {
-        output << distances[i] << endl;
-    }
 
     output.close();
 }

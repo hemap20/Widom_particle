@@ -1,3 +1,4 @@
+#include "find_dist.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -8,15 +9,6 @@ using namespace std;
 
 //positions from POSCAR
 void find_dist(int& total_n_atoms, vector<vector<double>>& box_dim, vector<vector<double>>& positions, int& ith_particle, vector<double>& distances){
-    //total number of atoms
-    //L of the box_dim
-    //positions
-    //which particle is chosen
-    
-    //output the distance of ith particle wrt other particles in a 1D vector
-
-    //lengths 
-
     for(int j=0; j<total_n_atoms; j++){
        
         double dx = 0, dy = 0, dz = 0;

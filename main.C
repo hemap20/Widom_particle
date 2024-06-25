@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     string input_name = argv[1];
     string output_name = argv[2];
-    int ith_particle = stoi(argv[3]);
+    int ith_particle = stoi(argv[3])-1;
 
     // Start time
     auto start_time = chrono::high_resolution_clock::now();
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     find_dist(total_n_atoms, box_dim, positions, ith_particle, distances);
 
     // Print CONTCAR
-    print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions, distances);
+    print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
     // End time
     auto end_time = chrono::high_resolution_clock::now();
@@ -52,7 +52,8 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-//g++ -o main main.C input_funct.C output_func.C -std=c++11
+//g++ -o main main.C input_func.C output_func.C find_dist.C -std=c++11
 //./main input_file output_file ith_particle
 
-
+//store the index of particle i, particle j and the distance
+//only of those witin the cutoff radius
