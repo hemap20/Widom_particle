@@ -1,127 +1,139 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <iomanip> 
+#include <iomanip>
 #include <string>
 #include <sstream>
 
 using namespace std;
 
 void read_input(const string& filename, vector<string>& atom_name, int& n_atom_types, int& total_n_atoms,
-                double& value, double box_dim[3][3], int n_atoms_per_type[], string& coordinate_sys,
-                double positions[][3]){
+                double& value, vector<vector<double>>& box_dim, vector<int>& n_atoms_per_type,
+                string& coordinate_sys, vector<vector<double>>& positions) {
     
     ifstream input(filename);
 
+    if (!input.is_open()) {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
     string line;
 
-    //KCl
+    // Read atom types
     getline(input, line);
     istringstream atoms(line);
-
-    //tokens of line stored here 
-    string token; 
-
-    //the number of types of atoms present
+    string token;
     while (atoms >> token) {
         n_atom_types++;
         atom_name.push_back(token);
     }
-    token.clear();
 
-
-    //1.0
-    getline(input, line);   
+    // Read value
+    getline(input, line);
     istringstream val(line);
     val >> value;
 
-
-    //box dimensions
-    for(int i=0; i<3; i++){
+    // Read box dimensions
+    box_dim.resize(3, vector<double>(3));
+    for (int i = 0; i < 3; ++i) {
         getline(input, line);
         istringstream box(line);
         box >> box_dim[i][0] >> box_dim[i][1] >> box_dim[i][2];
     }
 
-    //number of atoms of each type
+    // Read number of atoms per type
     getline(input, line);
     istringstream atom_type(line);
-    for(int i=0; i<n_atom_types; i++){
+    int total_atoms = 0;
+    for (int i = 0; i < n_atom_types; ++i) {
         int token_value;
         atom_type >> token_value;
-        n_atoms_per_type[i] = token_value;
-        total_n_atoms += token_value;
+        n_atoms_per_type.push_back(token_value);
+        total_atoms += token_value;
     }
+    total_n_atoms = total_atoms;
 
-    //coordinate system   
+    // Read coordinate system
     getline(input, coordinate_sys);
 
-    //coordinates of the particles
-    for(int i=0; i<total_n_atoms; i++){
+    // Read positions
+    positions.resize(total_n_atoms, vector<double>(3));
+    for (int i = 0; i < total_n_atoms; ++i) {
         getline(input, line);
         istringstream coord(line);
         coord >> positions[i][0] >> positions[i][1] >> positions[i][2];
     }
 
-    //closing input
     input.close();
 }
 
-void print_CONTCAR(const string& filename, vector<string>& atom_name, int& n_atom_types, int& total_n_atoms,
-                double& value, double box_dim[3][3], int n_atoms_per_type[], string& coordinate_sys,
-                double positions[][3]){
+void print_CONTCAR(const string& filename, const vector<string>& atom_name, int n_atom_types, int total_n_atoms,
+                double value, const vector<vector<double>>& box_dim, const vector<int>& n_atoms_per_type,
+                const string& coordinate_sys, const vector<vector<double>>& positions) {
     
     ofstream output(filename);
 
-    //atom names
-    for(int i=0; i<n_atom_types; i++){
-       output <<  atom_name[i] << " ";
+    if (!output.is_open()) {
+        cerr << "Error opening file for writing: " << filename << endl;
+        return;
     }
-    output << " " << endl;
 
-    //charges
+    // Print atom names
+    for (int i = 0; i < n_atom_types; ++i) {
+        output << atom_name[i] << " ";
+    }
+    output << endl;
+
+    // Print value
     output << value << endl;
 
-    //box dimensions
-    for(int i=0; i<3; i++){
+    // Print box dimensions
+    for (int i = 0; i < 3; ++i) {
         output << "\t" << box_dim[i][0] << " " << box_dim[i][1] << " " << box_dim[i][2] << endl;
     }
 
-    //number of atoms per type
-    for(int i=0; i<n_atom_types; i++){
+    // Print number of atoms per type
+    for (int i = 0; i < n_atom_types; ++i) {
         output << n_atoms_per_type[i] << " ";
     }
     output << endl;
 
-    //coordinate system
+    // Print coordinate system
     output << coordinate_sys << endl;
 
-    //positions of atoms
-    for(int i=0; i<total_n_atoms; i++){
+    // Print positions of atoms
+    for (int i = 0; i < total_n_atoms; ++i) {
         output << positions[i][0] << " " << positions[i][1] << " " << positions[i][2] << endl;
     }
 
     output.close();
 }
 
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        cerr << "Usage: " << argv[0] << " input_file output_file" << endl;
+        return 1;
+    }
 
-int main(int argc, char* argv[]){
-    
     string input_name = argv[1];
     string output_name = argv[2];
 
-    //all variables
-    vector<string> atom_name = {};
-    int n_atom_types=0;
+    // Declare variables
+    vector<string> atom_name;
+    int n_atom_types = 0;
     int total_n_atoms = 0;
     double value = 0;
-    double box_dim[3][3] = {0};
-    int n_atoms_per_type[n_atom_types];
+    vector<vector<double>> box_dim(3, vector<double>(3));
+    vector<int> n_atoms_per_type;
     string coordinate_sys;
-    double positions[total_n_atoms][3];
+    vector<vector<double>> positions;
 
+    // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
-    print_CONTCAR(output_name, atom_name, n_atom_types,total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
+
+    // Print CONTCAR
+    print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
     return 0;
 }
