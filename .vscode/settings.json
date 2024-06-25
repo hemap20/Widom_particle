@@ -4,6 +4,11 @@
         "POSCAR_to_CONTCAR.C": "cpp",
         "vector": "cpp",
         "POS_to_CONT_2.C": "cpp",
-        "POS_to_CONT.C": "cpp"
+        "POS_to_CONT.C": "cpp",
+        "read_input.C": "cpp",
+        "print_CONTCAR.C": "cpp",
+        "chrono": "cpp",
+        "POS_to_CONT_3.C": "cpp",
+        "POS_to_CONT_1.C": "cpp"
     }
 }
