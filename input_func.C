@@ -1,8 +1,7 @@
+#include "input_func.h"
+#include <vector>
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <iomanip>
-#include <string>
 #include <sstream>
 
 using namespace std;

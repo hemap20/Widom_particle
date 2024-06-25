@@ -9,6 +9,14 @@
         "print_CONTCAR.C": "cpp",
         "chrono": "cpp",
         "POS_to_CONT_3.C": "cpp",
-        "POS_to_CONT_1.C": "cpp"
+        "POS_to_CONT_1.C": "cpp",
+        "distances.C": "cpp",
+        "Pairwise_Energy.C": "cpp",
+        "input_func.C": "cpp",
+        "output_CONTCAR.C": "cpp",
+        "output_func.C": "cpp",
+        "main.C": "cpp",
+        "find_dist.C": "cpp",
+        "iomanip": "cpp"
     }
 }
