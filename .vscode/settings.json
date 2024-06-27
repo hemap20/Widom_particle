@@ -17,6 +17,10 @@
         "output_func.C": "cpp",
         "main.C": "cpp",
         "find_dist.C": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "Pairwise_dist.C": "cpp",
+        "dist.C": "cpp",
+        "dist_potenergy.C": "cpp",
+        "tuple": "cpp"
     }
 }
