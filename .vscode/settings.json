@@ -21,6 +21,7 @@
         "Pairwise_dist.C": "cpp",
         "dist.C": "cpp",
         "dist_potenergy.C": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "forces.C": "cpp"
     }
 }
