@@ -41,14 +41,13 @@ double dist_potenergy(int N, double rc, vector<double> &Fx, vector<double> &Fy, 
 
             //distance r
             r = sqrt(dx*dx + dy*dy + dz*dz);
-
+            
             //square of the distance between the particles
             r2 = r*r;
 
             //within the cutoff radius
             if(r<rc){
                 pairwise_distances.push_back(make_tuple(i, j, r));
-
                 rc_3 = 1.0/(rc*rc*rc);
                 ecorr = 8*3.145*rho*(rc_3*rc_3*rc_3/9.0-rc_3/3.0);
                 ecut = 4*(rc_3*rc_3*rc_3*rc_3-rc_3*rc_3);
@@ -56,21 +55,19 @@ double dist_potenergy(int N, double rc, vector<double> &Fx, vector<double> &Fy, 
                 
                 r6i         = 1.0/(r2*r2*r2);
                 pot_energy  += 4*(r6i*r6i - r6i) - ecut; //e_cut is subtracted to keep the graph of energy continous at the cutoff radius distance   
-                F           = 48*(r6i*r6i-0.5*r6i);
+                F           = 48*(r6i*r6i-0.5*r6i); //*******//store this value as a vector quantity
 
-                //calculating the components of the forces and adding them up
+                //calculating the components of the forces and adding them up //*******//store this value as a vector quantity
                 Fx[i] += dx*F/r2;
                 Fx[j] -= dx*F/r2;
                 Fy[i] += dy*F/r2;
                 Fy[j] -= dy*F/r2;
                 Fz[i] += dz*F/r2;
                 Fz[j] -= dz*F/r2;
-
-                
             }
         }
     }
-    return pot_energy + N*ecorr; //potential energy 
+    return pot_energy+ N*ecorr; //potential energy 
 }
 
 

@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     string coordinate_sys;
     vector<vector<double>> positions;
     vector<double> distances;
-    vector<tuple<int, int, double>> pairwise_distances;
+    vector<PairwiseDistance> pairwise_distances;    
     
 
     // Read input
@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
     // Print CONTCAR
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
+    //positions = 
     switch (function_choice) {
         case DIST_POTENERGY_FUNCTION:
             {
@@ -59,7 +60,7 @@ int main(int argc, char* argv[]) {
                 for (const auto& distance_info : pairwise_distances) {
                     cout << "i: " << get<0>(distance_info) << ", j: " << get<1>(distance_info) << ", r: " << get<2>(distance_info) << endl;
                 }
-                cout << "Potential Energy: " << potential_energy << endl;
+                cout << "Potential Energy: " <<double F potential_energy << endl;
             }
             break;
         case PAIRWISE_DIST_FUNCTION:
@@ -81,7 +82,7 @@ int main(int argc, char* argv[]) {
             return 1;
     }
 
-    // End time
+    // End timedouble F
     auto end_time = chrono::high_resolution_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
     cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
@@ -103,6 +104,12 @@ int main(int argc, char* argv[]) {
 
 //optimise the N2 loops by using parallelisation
 //use better data structures for pairwise_distances
+//storing forces and radii as vector quantities with components
+//analytically calculate the LJ pot of 2 particles and compare with the code's output
+//write function for forces separately 
 
 
 //take care of the units for energy and force calculations
+
+//write the force and pot_energy functions
+//check with the matlab code

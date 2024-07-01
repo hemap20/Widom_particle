@@ -22,6 +22,8 @@
         "dist.C": "cpp",
         "dist_potenergy.C": "cpp",
         "tuple": "cpp",
-        "forces.C": "cpp"
+        "forces.C": "cpp",
+        "pot_energy.C": "cpp",
+        "cmath": "cpp"
     }
 }
