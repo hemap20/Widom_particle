@@ -55,9 +55,9 @@ double dist_potenergy(int N, double rc, vector<double> &Fx, vector<double> &Fy, 
                 
                 r6i         = 1.0/(r2*r2*r2);
                 pot_energy  += 4*(r6i*r6i - r6i) - ecut; //e_cut is subtracted to keep the graph of energy continous at the cutoff radius distance   
-                F           = 48*(r6i*r6i-0.5*r6i); //*******//store this value as a vector quantity
+                F           = 48*(r6i*r6i-0.5*r6i); //force between the i and j particles, not the total force
 
-                //calculating the components of the forces and adding them up //*******//store this value as a vector quantity
+                //calculating the components of the forces and adding them up 
                 Fx[i] += dx*F/r2;
                 Fx[j] -= dx*F/r2;
                 Fy[i] += dy*F/r2;

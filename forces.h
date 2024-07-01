@@ -6,10 +6,13 @@
 #include <vector>
 #include <cmath>
 #include <tuple>
+#include <map>
 //include path to pairwise_distance
 
 
 using namespace std; 
+
+struct PairwiseDistance;
 
 struct PairwiseForce {
     int i;
@@ -18,6 +21,6 @@ struct PairwiseForce {
     vector<double> F_vec;
 };
 
-double force(const vector<PairwiseDistance>& pairwise_distances,vector<tuple<int, int, double, vector<PairwiseForce>>>& pairwise_forces, int N );
+void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int, int, double, vector<PairwiseForce>>>& pairwise_forces);
 
 #endif 

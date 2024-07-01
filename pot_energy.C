@@ -51,7 +51,6 @@ double pot_energy(int N, double rc, vector<vector<double>>& box_dim, vector<vect
             }
         }
     }
-
     return pot_energy_total;
 }
 

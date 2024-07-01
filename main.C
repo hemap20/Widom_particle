@@ -8,6 +8,8 @@
 #include "output_func.h"
 #include "pairwise_dist.h"
 #include "dist_potenergy.h"
+#include "pot_energy.h"
+#include "forces.h"
 
 using namespace std;
 
@@ -38,8 +40,8 @@ int main(int argc, char* argv[]) {
     string coordinate_sys;
     vector<vector<double>> positions;
     vector<double> distances;
-    vector<PairwiseDistance> pairwise_distances;    
-    
+    vector<tuple<int, int, double, vector<PairwiseDistance>>> pairwise_distances;
+    vector<tuple<int, int, double, vector<PairwiseForce>>> pairwise_forces;    
 
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
@@ -103,13 +105,6 @@ int main(int argc, char* argv[]) {
 
 
 //optimise the N2 loops by using parallelisation
-//use better data structures for pairwise_distances
-//storing forces and radii as vector quantities with components
 //analytically calculate the LJ pot of 2 particles and compare with the code's output
-//write function for forces separately 
-
-
-//take care of the units for energy and force calculations
-
-//write the force and pot_energy functions
 //check with the matlab code
+//change main to remove dist, include forces file
