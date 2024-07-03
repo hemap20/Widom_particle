@@ -7,9 +7,8 @@
 #include "input_func.h"
 #include "output_func.h"
 #include "pairwise_dist.h"
-//#include "dist_potenergy.h"
-#include "pot_energy.h"
-#include "forces.h"
+// #include "pot_energy.h"
+// #include "forces.h"
 
 using namespace std;
 
@@ -17,8 +16,9 @@ int main(int argc, char* argv[]) {
 
     string input_name = argv[1];
     string output_name = argv[2];
-    int rc = stoi(argv[3])-1;
+    double rc = stod(argv[3])-1;
     double rho = stod(argv[4])-1;
+    bool print_flag = (stoi(argv[5]) != 0);
 
     // Start time
     auto start_time = chrono::high_resolution_clock::now();
@@ -36,31 +36,53 @@ int main(int argc, char* argv[]) {
     vector<vector<double>> positions;
     vector<double> distances;
     vector<tuple<int, int, double, vector<PairwiseDistance>>> pairwise_distances;
-    vector<tuple<int,vector<PairwiseForce>>> pairwise_forces;    
+//    vector<tuple<int,vector<PairwiseForce>>> pairwise_forces;    
 
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
-
-    vector<double> Fx(total_n_atoms, 0.0);
-    vector<double> Fy(total_n_atoms, 0.0);
-    vector<double> Fz(total_n_atoms, 0.0);
 
     // Print CONTCAR
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
     //compute distances
-    dist(total_n_atoms, rc, box_dim, positions, pairwise_distances, rho);
+    dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
 
     //print the elements (optional)
-    //***
+    if(print_flag){
+        for (const auto& item : pairwise_distances) {
+            int i = get<0>(item);
+            int j = get<1>(item);
+            double r = get<2>(item);
+            cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
+    }
+    }
 
-    //compute total potential energy
-    cout << "Total Potential Energy" << pot_energy(pairwise_distances, rc) << endl;
+    // //compute total potential energy
+    // cout << "Total Potential Energy" << pot_energy(pairwise_distances, rc) << endl;
 
-    //compute the forces
-    forces(pairwise_distances, pairwise_forces);
+    // //compute the forces
+    // forces(pairwise_distances, pairwise_forces);
 
-    // End timedouble F
+    // //print forces (optional)
+    // if(print_flag){
+    //     for (const auto& item : pairwise_forces) {
+    //         int i = get<0>(item);
+    //         const vector<PairwiseForce>& forces = get<1>(item);
+    //         cout << "Particle " << i << " forces:\n";
+    //         for (const auto& force : forces) {
+    //             cout << "  Force vector: (";
+    //             for (size_t k = 0; k < force.F_vec.size(); ++k) {
+    //                 cout << force.F_vec[k];
+    //                 if (k < force.F_vec.size() - 1) {
+    //                     cout << ", ";
+    //                 }
+    //             }
+    //             cout << ")\n";
+    //         }
+    //     }
+    // }
+
+    // End time
     auto end_time = chrono::high_resolution_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
     cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
@@ -75,12 +97,12 @@ int main(int argc, char* argv[]) {
 
 
 
-//g++ -o main main.C input_func.C output_func.C dist_potenergy.C pairwise_dist.C -std=c++11
-//./main POSCAR CONTCAR rc rho tag 
+//g++ -o main main.C input_func.C output_func.C pairwise_dist.C pot_energy.C forces.C -std=c++11
+//./main POSCAR CONTCAR rc rho tag
+
 
 
 
 //optimise the N2 loops by using parallelisation
 //analytically calculate the LJ pot of 2 particles and compare with the code's output
 //check with the matlab code
-//change main to remove dist, include forces file

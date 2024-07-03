@@ -24,6 +24,7 @@
         "tuple": "cpp",
         "forces.C": "cpp",
         "pot_energy.C": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "forces_2.C": "cpp"
     }
 }

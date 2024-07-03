@@ -9,10 +9,10 @@
 
 using namespace std;
 
-struct PairwiseForce {
-    int i;
-    vector<double> F_vec;
-};
+// struct PairwiseForce {
+//     int i;
+//     vector<double> F_vec;
+// };
 
 void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int,vector<PairwiseForce>>>& pairwise_forces) {
     // Create a map to group j values by their corresponding i values
@@ -29,17 +29,20 @@ void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pai
     // Iterate through the map to loop over unique i values and their corresponding j values
     for (const auto& pair : i_to_js_map) { //for every unique i
         int i = pair.first;
-        double Fx_i = 0, Fy_i = 0, Fz_i = 0;
+        double Fx_i = 0, Fy_i = 0, Fz_i = 0, F = 0;
         const vector<PairwiseDistance>& distances = pair.second;
 
         for (const auto& pd : distances) { //for every j that has the same i: within the rc radius
-            double F = 48 * (1.0 / pow(pd.r, 8) - 0.5 / pow(pd.r, 4));
+            F = 48 * (1.0 / pow(pd.r, 8) - 0.5 / pow(pd.r, 4));
             Fx_i += pd.unit_r_vec[0] * F; // Force component along x-direction
             Fy_i += pd.unit_r_vec[1] * F; // Force component along y-direction
             Fz_i += pd.unit_r_vec[2] * F; // Force component along z-direction
+            //summing the forces for each i in the list
         }
         vector<double> F_vector = { Fx_i, Fy_i, Fz_i};
-        pairwise_forces.push_back(make_tuple(i, vector<PairwiseForce>{PairwiseForce{i, F_vector}}));
+        PairwiseForce pf = { i, F, F_vector };
+        pairwise_forces.push_back(make_tuple(i,vector<PairwiseForce>{pf}));
+        //pairwise_forces.push_back(make_tuple(i, vector<PairwiseForce>{PairwiseForce{i, F_vector}}));
     }
 }
 

@@ -1,25 +1,16 @@
-#include "pairwise_dist.h"
-#include <string>
+#include "forces_2.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
 #include <tuple>
+#include <map>
 
 using namespace std;
 
-// struct PairwiseDistance {
-//     int i;
-//     int j;
-//     double r;
-//     vector<double> unit_r_vec;
-// };
-
-//positions from POSCAR
-
-//compare with cutoff radius, check PBC, compute the distance
-void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){
+void(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions){
     for(int i=0; i<N; i++){
-        for(int j=i+1; j<N; j++){
+        for(int j=0 j<N; j++){
             //distances between the particles
             double dx = positions[j][0] - positions[i][0];
             double dy = positions[j][1] - positions[i][1];
@@ -35,17 +26,8 @@ void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<doubl
 
             
 
-            //cutoff radius
-            if (r < rc) {
-                vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
-                PairwiseDistance pd = { i, j, r, unit_r_vec };
-                //all the unique pairs are listed out
-                pairwise_distances.push_back(make_tuple(i, j, r, vector<PairwiseDistance>{pd}));
-            }
-
         }
     }
 
-    
-}
 
+}

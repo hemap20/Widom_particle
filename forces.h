@@ -16,7 +16,6 @@ struct PairwiseDistance;
 
 struct PairwiseForce {
     int i;
-    int j;
     double F;
     vector<double> F_vec;
 };
