@@ -21,6 +21,6 @@ struct PairwiseForce {
     vector<double> F_vec;
 };
 
-void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int, int, double, vector<PairwiseForce>>>& pairwise_forces);
+void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int,vector<PairwiseForce>>>& pairwise_forces);
 
 #endif 

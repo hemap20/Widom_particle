@@ -7,14 +7,11 @@
 #include "input_func.h"
 #include "output_func.h"
 #include "pairwise_dist.h"
-#include "dist_potenergy.h"
+//#include "dist_potenergy.h"
 #include "pot_energy.h"
 #include "forces.h"
 
 using namespace std;
-
-const int DIST_POTENERGY_FUNCTION = 1;
-const int PAIRWISE_DIST_FUNCTION = 2;
 
 int main(int argc, char* argv[]) {
 
@@ -22,8 +19,6 @@ int main(int argc, char* argv[]) {
     string output_name = argv[2];
     int rc = stoi(argv[3])-1;
     double rho = stod(argv[4])-1;
-    int function_choice = stoi(argv[5]);
-
 
     // Start time
     auto start_time = chrono::high_resolution_clock::now();
@@ -41,7 +36,7 @@ int main(int argc, char* argv[]) {
     vector<vector<double>> positions;
     vector<double> distances;
     vector<tuple<int, int, double, vector<PairwiseDistance>>> pairwise_distances;
-    vector<tuple<int, int, double, vector<PairwiseForce>>> pairwise_forces;    
+    vector<tuple<int,vector<PairwiseForce>>> pairwise_forces;    
 
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
@@ -53,36 +48,17 @@ int main(int argc, char* argv[]) {
     // Print CONTCAR
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
-    //positions = 
-    switch (function_choice) {
-        case DIST_POTENERGY_FUNCTION:
-            {
-                double potential_energy = dist_potenergy(total_n_atoms, rc, Fx, Fy, Fz, box_dim, positions, pairwise_distances, rho);
-                //print pairwise distances
-                for (const auto& distance_info : pairwise_distances) {
-                    cout << "i: " << get<0>(distance_info) << ", j: " << get<1>(distance_info) << ", r: " << get<2>(distance_info) << endl;
-                }
-                cout << "Potential Energy: " <<double F potential_energy << endl;
-            }
-            break;
-        case PAIRWISE_DIST_FUNCTION:
-            {
-                //compute pairwise distances only
-                for(int i=0; i<total_n_atoms; i++){
-                    for(int j=i+1; j<total_n_atoms; j++){
-                        dist(box_dim, positions, pairwise_distances, i, j, rc);
-                    }
-                }
-                //print pairwise distances
-                for (const auto& distance_info : pairwise_distances) {
-                    cout << "i: " << get<0>(distance_info) << ", j: " << get<1>(distance_info) << ", r: " << get<2>(distance_info) << endl;
-                }
-            }
-            break;
-        default:
-            cout << "Invalid function choice. Use 1 (for dist_potenergy) or 2 (for pairwise_dist)." << endl;
-            return 1;
-    }
+    //compute distances
+    dist(total_n_atoms, rc, box_dim, positions, pairwise_distances, rho);
+
+    //print the elements (optional)
+    //***
+
+    //compute total potential energy
+    cout << "Total Potential Energy" << pot_energy(pairwise_distances, rc) << endl;
+
+    //compute the forces
+    forces(pairwise_distances, pairwise_forces);
 
     // End timedouble F
     auto end_time = chrono::high_resolution_clock::now();

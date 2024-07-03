@@ -9,6 +9,13 @@
 
 using namespace std;
 
-void dist(vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double>>& pairwise_distances, int i, int j, double rc);
+struct PairwiseDistance {
+    int i;
+    int j;
+    double r;
+    vector<double> unit_r_vec;
+};
+
+void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, double rho);
 
 #endif
