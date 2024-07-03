@@ -34,7 +34,7 @@ void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pai
         const vector<PairwiseDistance>& distances = pair.second;
 
         for (const auto& pd : distances) { //for every j that has the same i: within the rc radius
-            F = 48 * (1.0 / pow(pd.r, 8) - 0.5 / pow(pd.r, 4));
+            F = 48 * (1.0 / pow(pd.r, 13) - 0.5 / pow(pd.r, 7));
             Fx_i += pd.unit_r_vec[0] * F; // Force component along x-direction
             Fy_i += pd.unit_r_vec[1] * F; // Force component along y-direction
             Fz_i += pd.unit_r_vec[2] * F; // Force component along z-direction
