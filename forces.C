@@ -14,7 +14,8 @@ using namespace std;
 //     vector<double> F_vec;
 // };
 
-void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int,vector<PairwiseForce>>>& pairwise_forces) {
+void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, vector<tuple<int, double, vector<PairwiseForce>>>& pairwise_forces) {
+    //this method does not include repetition of pairs of particles. The value of the force calculated will be lesser than the actual value
     // Create a map to group j values by their corresponding i values
     map<int, vector<PairwiseDistance>> i_to_js_map;
 
@@ -41,7 +42,7 @@ void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pai
         }
         vector<double> F_vector = { Fx_i, Fy_i, Fz_i};
         PairwiseForce pf = { i, F, F_vector };
-        pairwise_forces.push_back(make_tuple(i,vector<PairwiseForce>{pf}));
+        pairwise_forces.push_back(make_tuple(i, F, vector<PairwiseForce>{pf}));
         //pairwise_forces.push_back(make_tuple(i, vector<PairwiseForce>{PairwiseForce{i, F_vector}}));
     }
 }

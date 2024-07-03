@@ -7,8 +7,8 @@
 #include "input_func.h"
 #include "output_func.h"
 #include "pairwise_dist.h"
-// #include "pot_energy.h"
-// #include "forces.h"
+#include "pot_energy.h"
+#include "forces.h"
 
 using namespace std;
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     vector<vector<double>> positions;
     vector<double> distances;
     vector<tuple<int, int, double, vector<PairwiseDistance>>> pairwise_distances;
-//    vector<tuple<int,vector<PairwiseForce>>> pairwise_forces;    
+    vector<tuple<int, double, vector<PairwiseForce>>> pairwise_forces;    
 
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
@@ -54,33 +54,34 @@ int main(int argc, char* argv[]) {
             int j = get<1>(item);
             double r = get<2>(item);
             cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
+        }
     }
+
+    //compute total potential energy
+    cout << "Total Potential Energy: " << pot_energy(pairwise_distances, rc) << endl;
+
+    //compute the forces
+    forces(pairwise_distances, pairwise_forces);
+
+    //print forces (optional)
+    if(print_flag){
+        for (const auto& item : pairwise_forces) {
+            int i = get<0>(item);
+            double F = get<1>(item);
+            const vector<PairwiseForce>& forces = get<2>(item);
+            cout << "Particle " << i << " Force Mag: " << F << endl;
+            for (const auto& force : forces) {
+                cout << "  Force vector: (";
+                for (size_t k = 0; k < force.F_vec.size(); ++k) {
+                    cout << force.F_vec[k];
+                    if (k < force.F_vec.size() - 1) {
+                        cout << ", ";
+                    }
+                }
+                cout << ")\n";
+            }
+        }
     }
-
-    // //compute total potential energy
-    // cout << "Total Potential Energy" << pot_energy(pairwise_distances, rc) << endl;
-
-    // //compute the forces
-    // forces(pairwise_distances, pairwise_forces);
-
-    // //print forces (optional)
-    // if(print_flag){
-    //     for (const auto& item : pairwise_forces) {
-    //         int i = get<0>(item);
-    //         const vector<PairwiseForce>& forces = get<1>(item);
-    //         cout << "Particle " << i << " forces:\n";
-    //         for (const auto& force : forces) {
-    //             cout << "  Force vector: (";
-    //             for (size_t k = 0; k < force.F_vec.size(); ++k) {
-    //                 cout << force.F_vec[k];
-    //                 if (k < force.F_vec.size() - 1) {
-    //                     cout << ", ";
-    //                 }
-    //             }
-    //             cout << ")\n";
-    //         }
-    //     }
-    // }
 
     // End time
     auto end_time = chrono::high_resolution_clock::now();

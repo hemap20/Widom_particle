@@ -23,5 +23,5 @@ double pot_energy(const vector<tuple<int, int, double, vector<PairwiseDistance>>
         pot_energy_total += 4 * (r6i * r6i - r6i) - ecut;
     }
 
-    return pot_energy_total;
+    return pot_energy_total/2;
 }
