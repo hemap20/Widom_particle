@@ -25,6 +25,9 @@
         "forces.C": "cpp",
         "pot_energy.C": "cpp",
         "cmath": "cpp",
-        "forces_2.C": "cpp"
+        "forces_2.C": "cpp",
+        "mclj_npt.C": "cpp",
+        "widom.C": "cpp",
+        "widom_original.C": "cpp"
     }
 }

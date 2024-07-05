@@ -96,5 +96,3 @@ int main(int argc, char* argv[]) {
 }
 
 //optimise the N2 loops by using parallelisation
-//analytically calculate the LJ pot of 2 particles and compare with the code's output
-//check with the matlab code
