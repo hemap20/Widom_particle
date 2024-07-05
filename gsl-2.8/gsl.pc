@@ -1,0 +1,11 @@
+prefix=/home/hema/local
+exec_prefix=/home/hema/local
+libdir=/home/hema/local/lib64
+includedir=/home/hema/local/include
+GSL_CBLAS_LIB=-lgslcblas
+
+Name: GSL
+Description: GNU Scientific Library
+Version: 2.8
+Libs: -L/home/hema/local/lib64 -lgsl ${GSL_CBLAS_LIB} -lm -lm 
+Cflags: -I/home/hema/local/include
