@@ -28,6 +28,8 @@
         "forces_2.C": "cpp",
         "mclj_npt.C": "cpp",
         "widom.C": "cpp",
-        "widom_original.C": "cpp"
+        "widom_original.C": "cpp",
+        "main_w.C": "cpp",
+        "insert.C": "cpp"
     }
 }
