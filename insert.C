@@ -6,6 +6,7 @@
 #include <gsl/gsl_rng.h>
 #include "pairwise_dist.h"
 #include "pot_energy.h"
+#include "insert.h"
 
 
 
