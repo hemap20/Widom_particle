@@ -7,7 +7,6 @@
 
 using namespace std;
 
-//positions from POSCAR
 
 //compare with cutoff radius, check PBC, compute the distance
 void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){

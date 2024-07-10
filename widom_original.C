@@ -1,24 +1,3 @@
-/* 
-   Metropolis Monte Carlo simulation of a Lennard-Jones fluid
-   with Widom test-particle insertion to compute mu_ex
-
-   Cameron F. Abrams
-
-   Written for the course CHE T580, Modern Molecular Simulation
-   Spring 20-21
-
-   compile using "gcc -o mclj_widom mclj_widom.c -lm -lgsl"
-
-   runs as "./mclj_widom -N <number_of_particles> -rho <density> \
-                    -nc <numcycles(1e6)>  -dr <delta-r> \
-		                -s <seed(?)> -ne <#equil.cycles(100)>"
-
-   You must have the GNU Scientific Library installed.
-
-   Drexel University, Department of Chemical Engineering
-   Philadelphia
-   (c) 2004-2021
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
