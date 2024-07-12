@@ -30,6 +30,7 @@
         "widom.C": "cpp",
         "widom_original.C": "cpp",
         "main_w.C": "cpp",
-        "insert.C": "cpp"
+        "insert.C": "cpp",
+        "main_widom.C": "cpp"
     }
 }
