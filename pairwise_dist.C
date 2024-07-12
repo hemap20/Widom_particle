@@ -9,6 +9,7 @@ using namespace std;
 
 
 //compare with cutoff radius, check PBC, compute the distance
+//start from i0
 void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){
     for(int i=0; i<N; i++){
         for(int j=0; j<N; j++){
