@@ -1,7 +1,8 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++11 -Wall -I/usr/local/home/hema/Codes/basics/Basics/gsl-2.8/gsl/gsl_rng.h
+
 # GSL library flags
 LIBS = -lgsl -lgslcblas
 
