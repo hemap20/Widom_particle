@@ -83,6 +83,7 @@ int main(int argc, char* argv[]) {
     int n_acc = 0;
     //till the insertion happens
     while(n_acc < n_insert){
+        //gsl_rng_uniform(r) has to be b/n 0,1
         if(gsl_rng_uniform(r) < exp(-beta*(PE_new-PE_old))){ //should depend on the density
             PE_old = PE_new;
             n_acc++; //register the insertion 
@@ -90,6 +91,7 @@ int main(int argc, char* argv[]) {
         else{
             //revert to the original positions, pairwise dist, total_num
             positions.pop_back();
+            //*********clear dist before this
             dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
             total_n_atoms = positions.size();
         }
@@ -110,4 +112,5 @@ int main(int argc, char* argv[]) {
 }
 
 //optimise the N2 loops by using parallelisation
+//take an avegage in the end
 

@@ -247,7 +247,7 @@ int main ( int argc, char * argv[] ) {
     dy = dr*(0.5-gsl_rng_uniform(r));
     dz = dr*(0.5-gsl_rng_uniform(r));
     //printf("%d %.6lf %.6lf %.6lf\n",i,dx,dy,dz);
-    ei_old=e_i(i,rx,ry,rz,N,L,rc2,tailcorr,ecor,shift,ecut,&ivir_old,0);
+    ei_old=e_i(i,rx,ry,rz,N,L,rc2,tailcei_neworr,ecor,shift,ecut,&ivir_old,0);
     /* Save the current position of particle i */
     rxold=rx[i];
     ryold=ry[i];
