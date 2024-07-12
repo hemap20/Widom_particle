@@ -1,15 +1,15 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -I/usr/local/home/hema/Codes/basics/Basics/gsl-2.8/gsl/gsl_rng.h
+CXXFLAGS = -std=c++11 -Wall -I~/Codes/basics/Basics/gsl-2.8/gsl
 # GSL library flags
 LIBS = -lgsl -lgslcblas
 
-# Source files
-SRCS = main.C input_func.C output_func.C pairwise_dist.C pot_energy.C forces.C insert.C
+# Source files (adjust paths as per your directory structure)
+SRCS = basics/Basics/main.C basics/Basics/input_func.C basics/Basics/output_func.C basics/Basics/pairwise_dist.C basics/Basics/pot_energy.C basics/Basics/forces.C basics/Basics/insert.C
 
 # Object files
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:.C=.o)
 
 # Executable
 TARGET = main
@@ -18,8 +18,8 @@ TARGET = main
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LIBS)
 
-# Rule to compile .cpp files to .o files
-%.o: %.cpp
+# Rule to compile .C files to .o files
+%.o: %.C
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Phony target to clean objects and executable
