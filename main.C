@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <tuple>
 #include <gsl/gsl_rng.h>
-//#include </home/hema/Codes/basics/Basics/gsl-2.8/gsl/gsl_rng.h>
 #include "input_func.h"
 #include "output_func.h"
 #include "pairwise_dist.h"
@@ -54,7 +53,7 @@ int main(int argc, char* argv[]) {
         find the potential energy for the current set of atoms    
     */
     double PE_old = pot_energy(pairwise_distances, rc);
-    cout<< "PE_old" << PE_old << endl;
+    //cout<< "PE_old" << PE_old << endl;
 
 
     //generate random r value
@@ -77,7 +76,7 @@ int main(int argc, char* argv[]) {
         find the potential of the updated positions list
    */
     double PE_new = pot_energy(pairwise_distances, rc);
-    cout<< "PE_new" << PE_new << endl;
+    //cout<< "PE_new" << PE_new << endl;
 
   /*check for a valid insertion
         using the metropolis algo
@@ -85,22 +84,22 @@ int main(int argc, char* argv[]) {
         else: revert back to the original list
   */
     //within the loop
-    // int n_acc = 0;
-    // //till the insertion happens
-    // while(n_acc < n_insert){
-    //     //gsl_rng_uniform(r) has to be b/n 0,1
-    //     if(gsl_rng_uniform(r) < exp(-beta*(PE_new-PE_old))){ //should depend on the density
-    //         PE_old = PE_new;
-    //         n_acc++; //register the insertion 
-    //     }
-    //     else{
-    //         //revert to the original positions, pairwise dist, total_num
-    //         positions.pop_back();
-    //         //*********clear dist before this
-    //         dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
-    //         total_n_atoms = positions.size();
-    //     }
-    // }
+    int n_acc = 0;
+    //till the insertion happens
+    while(n_acc < n_insert){
+        //gsl_rng_uniform(r) has to be b/n 0,1
+        if(gsl_rng_uniform(r) < exp(-beta*(PE_new-PE_old))){ //should depend on the density
+            PE_old = PE_new;
+            n_acc++; //register the insertion 
+        }
+        else{
+            //revert to the original positions, pairwise dist, total_num
+            positions.pop_back();
+            //*********clear dist before this
+            dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+            total_n_atoms = positions.size();
+        }
+    }
     
     //print the updated contcar
     

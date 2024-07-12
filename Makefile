@@ -1,7 +1,8 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -I/usr/include/gsl
+CFLAGS = -O3 -Wall -L/home/hema/lib -I/home/hema/gsl/include   # Adjust the path as necessary
+# CFLAGS = -Wall -I~/Codes/basics/Basics/gsl-2.8/gsl  # Adjust the path as necessary
 # GSL library flags
 LIBS = -L/usr/local/lib -lgsl -lgslcblas -lm
 
