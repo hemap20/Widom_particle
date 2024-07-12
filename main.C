@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <tuple>
 #include <gsl/gsl_rng.h>
+//#include </home/hema/Codes/basics/Basics/gsl-2.8/gsl/gsl_rng.h>
 #include "input_func.h"
 #include "output_func.h"
 #include "pairwise_dist.h"

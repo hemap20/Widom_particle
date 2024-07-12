@@ -1,12 +1,12 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -I~/Codes/basics/Basics/gsl-2.8/gsl
+CXXFLAGS = -std=c++11 -Wall -I/usr/include/gsl
 # GSL library flags
-LIBS = -lgsl -lgslcblas
+LIBS = -L/usr/local/lib -lgsl -lgslcblas -lm
 
 # Source files (adjust paths as per your directory structure)
-SRCS = basics/Basics/main.C basics/Basics/input_func.C basics/Basics/output_func.C basics/Basics/pairwise_dist.C basics/Basics/pot_energy.C basics/Basics/forces.C basics/Basics/insert.C
+SRCS = main.C input_func.C output_func.C pairwise_dist.C pot_energy.C forces.C insert.C
 
 # Object files
 OBJS = $(SRCS:.C=.o)
