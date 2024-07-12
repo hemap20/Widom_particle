@@ -1,24 +1,25 @@
 # Compiler
 CXX = g++
-
 # Compiler flags
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++11 -Wall
+# GSL library flags
+LIBS = -lgsl -lgslcblas
 
 # Source files
-SRCS = main.C pairwise_dist.C pot_energy.C forces.C input_func.C output_func.C
+SRCS = main.cpp input_func.cpp output_func.cpp pairwise_dist.cpp pot_energy.cpp forces.cpp insert.cpp
 
 # Object files
-OBJS = $(SRCS:.C=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 # Executable
 TARGET = main
 
 # Rule to link the executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LIBS)
 
-# Rule to compile .C files to .o files
-%.o: %.C
+# Rule to compile .cpp files to .o files
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Phony target to clean objects and executable

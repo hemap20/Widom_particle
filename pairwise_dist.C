@@ -7,14 +7,6 @@
 
 using namespace std;
 
-// struct PairwiseDistance {
-//     int i;
-//     int j;
-//     double r;
-//     vector<double> unit_r_vec;
-// };
-
-//positions from POSCAR
 
 //compare with cutoff radius, check PBC, compute the distance
 void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){
@@ -33,8 +25,6 @@ void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<doubl
 
                 //distance r
                 double r = sqrt(dx*dx + dy*dy + dz*dz);
-
-                
 
                 //cutoff radius
                 if (r < rc) {
