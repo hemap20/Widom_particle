@@ -38,4 +38,3 @@ void dist(int N, double rc, vector<vector<double>>& box_dim, vector<vector<doubl
         }
     }
 }
-

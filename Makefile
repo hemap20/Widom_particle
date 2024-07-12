@@ -1,16 +1,16 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CFLAGS = -O3 -Wall -L/home/hema/lib -I/home/hema/gsl/include   # Adjust the path as necessary
+CXXFLAGS = -std=c++11 -Wall -Wextra
 # CFLAGS = -Wall -I~/Codes/basics/Basics/gsl-2.8/gsl  # Adjust the path as necessary
 # GSL library flags
-LIBS = -L/usr/local/lib -lgsl -lgslcblas -lm
+LIBS = 
 
 # Source files (adjust paths as per your directory structure)
-SRCS = main.C input_func.C output_func.C pairwise_dist.C pot_energy.C forces.C insert.C
+SRCS = main.cpp input_func.cpp output_func.cpp pairwise_dist.cpp pot_energy.cpp forces.cpp insert.cpp
 
 # Object files
-OBJS = $(SRCS:.C=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 # Executable
 TARGET = main

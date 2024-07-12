@@ -46,8 +46,3 @@ void forces(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pai
         //pairwise_forces.push_back(make_tuple(i, vector<PairwiseForce>{PairwiseForce{i, F_vector}}));
     }
 }
-
-
-
-
-
