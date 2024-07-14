@@ -43,77 +43,73 @@ int main(int argc, char* argv[]) {
     vector<tuple<int, double, vector<PairwiseForce>>> pairwise_forces;    
     double beta = 1/kT;
 
+    //generate a random number
+    mt19937 gen(seed);
+
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
     //compute distances
     dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
 
-    /*call pot energy
-        find the potential energy for the current set of atoms    
-    */
-    double PE_old = pot_energy(pairwise_distances, rc);
+    //PE for the current configuration
+    double PE_old = 0;
+    PE_old = pot_energy(pairwise_distances, rc);
     cout<< "PE_old" << PE_old << endl;
 
-
-    //generate random r value
-    //random_device rd;
-    mt19937 gen(seed);
-    //gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
-    //gsl_rng_set(r,seed);
-
-    //pass total_num by reference
-
-    /* insert particle
-        generate a random set of coordinates from r
-        add to the positions list, update total_number_atoms
-    */
-   insert_atom(seed, total_n_atoms, box_dim, positions);
-
-   //compute updated distances
-    pairwise_distances.clear();
-    dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
-
-   /*call pot energy
-        find the potential of the updated positions list
-   */
-    double PE_new = pot_energy(pairwise_distances, rc);
-    cout<< "PE_new" << PE_new << endl;
-
-  /*check for a valid insertion
-        using the metropolis algo
-        if valid: register the move; N++
-        else: revert back to the original list
-  */
     //within the loop
     int n_acc = 0;
+    int trials = 0;
     //till the insertion happens
     while(n_acc < n_insert){
-        //gsl_rng_uniform(r) has to be b/n 0,1
+        
+        //perform insertion
+        insert_atom(seed, total_n_atoms, box_dim, positions);
+
+        //compute updated distances
+        pairwise_distances.clear();
+        dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+
+        //PE for current configuration
+        double PE_new = 0;
+        PE_new = pot_energy(pairwise_distances, rc);
+    
         uniform_real_distribution<> dis_real(0.0, 1.0);
-        if(dis_real(gen) < exp(-beta*(PE_new-PE_old))){ //should depend on the density
-            PE_old = PE_new;
-            n_acc++; //register the insertion 
+
+        if(dis_real(gen) < exp(-beta*(PE_new-PE_old))){ 
+            n_acc++; //register the insertion
+            cout<< "PE_new" << PE_new << endl;
             cout << "registered" << endl;
+            PE_old = PE_new;
+
         }
         else{
             //revert to the original positions, pairwise dist, total_num
             positions.pop_back();
-            //*********clear dist before this
+            pairwise_distances.clear();
             dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
             total_n_atoms = positions.size();
         }
+        trials++;
     }
+
+    /* outside the loop: PE_old: find the current energy of the system
+    inside the loop: insert the atom
+    PE_new: find the energy of the new system
+    check if the energy diff isn't too high, PE_old = PE_new
+    else repeat the insertion, revert the changes to the dist, pos data strs
+    */
     
+    cout << trials << "number of trials" << endl; 
     //print the updated contcar
-    print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
+    print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     
     // End time
     // auto end_time = chrono::high_resolution_clock::now();
     // auto end_time_str = chrono::system_clock::to_time_t(end_time);
     // cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
 
-    // // Print processing time
+    // Print processing time
     // chrono::duration<double> elapsed_time = end_time - start_time;
     // cout << "Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
 
