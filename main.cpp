@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     //PE for the current configuration
     double PE_old = 0;
     PE_old = pot_energy(pairwise_distances, rc);
-    cout<< "PE_old" << PE_old << endl;
+    cout<< "PE_old " << PE_old << endl;
 
     //within the loop
     int n_acc = 0;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     while(n_acc < n_insert){
         
         //perform insertion
-        insert_atom(seed, total_n_atoms, box_dim, positions);
+        insert_atom((seed+trials), total_n_atoms, box_dim, positions);
 
         //compute updated distances
         pairwise_distances.clear();
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
 
         if(dis_real(gen) < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; //register the insertion
-            cout<< "PE_new" << PE_new << endl;
+            cout<< "PE_new " << PE_new << endl;
             cout << "registered" << endl;
             PE_old = PE_new;
 
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     else repeat the insertion, revert the changes to the dist, pos data strs
     */
     
-    cout << trials << "number of trials" << endl; 
+    cout << trials << " number of trials " << endl; 
     //print the updated contcar
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     

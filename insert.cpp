@@ -21,9 +21,9 @@ void insert_atom(int seed, int& total_n_atoms, vector<vector<double>>& box_dim, 
     mt19937 gen(seed);
     double rx = 0, ry = 0, rz = 0;
 
-    rx = (dis(gen)-0.5)*box_dim[0][0];
-    ry = (dis(gen)-0.5)*box_dim[1][1];
-    rz = (dis(gen)-0.5)*box_dim[2][2];
+    rx = abs((dis(gen)-0.5)*box_dim[0][0]);
+    ry = abs((dis(gen)-0.5)*box_dim[1][1]);
+    rz = abs((dis(gen)-0.5)*box_dim[2][2]);
 
     positions.push_back({ rx, ry, rz });
     total_n_atoms = positions.size();
