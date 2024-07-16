@@ -34,13 +34,13 @@ int main(int argc, char* argv[]) {
     int n_atom_types = 0;
     int total_n_atoms = 0;
     double value = 0;
-    vector<vector<double>> box_dim(3, vector<double>(3));
+    vector<vector<double> > box_dim(3, vector<double>(3));
     vector<int> n_atoms_per_type;
     string coordinate_sys;
-    vector<vector<double>> positions;
+    vector<vector<double> > positions;
     vector<double> distances;
-    vector<tuple<int, int, double, vector<PairwiseDistance>>> pairwise_distances;
-    vector<tuple<int, double, vector<PairwiseForce>>> pairwise_forces;    
+    vector<tuple<int, int, double, vector<PairwiseDistance> > > pairwise_distances;
+    vector<tuple<int, double, vector<PairwiseForce> > > pairwise_forces;    
     double beta = 1/kT;
 
     //generate a random number
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     while(n_acc < n_insert){
         
         //perform insertion
-        insert_atom((seed+trials), total_n_atoms, box_dim, positions);
+        insert_atom(seed, total_n_atoms, box_dim, positions);
 
         //compute updated distances
         pairwise_distances.clear();
@@ -85,10 +85,13 @@ int main(int argc, char* argv[]) {
         }
         else{
             //revert to the original positions, pairwise dist, total_num
-            positions.pop_back();
+            if (!positions.empty()) {
+                positions.pop_back();
+                total_n_atoms = positions.size();
+            }
             pairwise_distances.clear();
             dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
-            total_n_atoms = positions.size();
+            
         }
         trials++;
     }

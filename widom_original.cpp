@@ -241,7 +241,7 @@ int main ( int argc, char * argv[] ) {
   }
   for (c=0;c<nCycles;c++) {
     /* Randomly select a particle */
-    i=(int)gsl_rng_uniform_int(r,N);
+    i=(int)gsl_rng_uniform_int(r,N);                                                                                                    
     /* calculate displacement */
     dx = dr*(0.5-gsl_rng_uniform(r));
     dy = dr*(0.5-gsl_rng_uniform(r));

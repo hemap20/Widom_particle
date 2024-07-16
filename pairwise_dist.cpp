@@ -1,9 +1,9 @@
-#include "pairwise_dist.h"
 #include <string>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <tuple>
+#include "pairwise_dist.h"
 
 using namespace std;
 
@@ -21,11 +21,16 @@ void dist(const int& total_n_atoms, double rc, vector<vector<double>>& box_dim, 
                 dy = positions[j][1] - positions[i][1];
                 dz = positions[j][2] - positions[i][2];
 
-                //PBC: minimum image convention
-                dx = dx - box_dim[0][0]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][0]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][0]*ceil(dz/box_dim[2][2]-0.5);
-                dy = dy - box_dim[0][1]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][1]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][1]*ceil(dz/box_dim[2][2]-0.5);
-                dz = dz - box_dim[0][2]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][2]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][2]*ceil(dz/box_dim[2][2]-0.5);
-
+                //PBC: minimum image 
+                if (dx<box_dim[0][0]*0.5)    dx+=box_dim[0][0];
+                if (dx>box_dim[0][0]*0.5)    dx-=box_dim[0][0];
+                
+                if (dy>box_dim[1][1]*0.5)    dy-=box_dim[1][1];
+                if (dy<box_dim[1][1]*0.5)    dy+=box_dim[1][1];
+                
+                if (dz>box_dim[2][2]*0.5)    dz-=box_dim[2][2];
+                if (dz<box_dim[2][2]*0.5)    dz+=box_dim[2][2];
+                
                 //distance r
                 double r = 0;
                 r = sqrt(dx*dx + dy*dy + dz*dz);

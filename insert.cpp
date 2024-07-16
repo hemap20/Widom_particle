@@ -16,14 +16,20 @@ using namespace std;
 //potential energy for an entire system of particles
       //  generate a random set of coordinates from r
       //  add to the positions list, update total_number_atoms
-void insert_atom(int seed, int& total_n_atoms, vector<vector<double>>& box_dim, vector<vector<double>>& positions){
-    uniform_real_distribution<> dis(0.0, 1.0);
-    mt19937 gen(seed);
+void insert_atom(int seed, int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions){
     double rx = 0, ry = 0, rz = 0;
+    
+    uniform_real_distribution<> dis_x(0.0, box_dim[0][0]);
+    mt19937 gen_x(seed);
+    rx = dis_x(gen_x);
 
-    rx = abs((dis(gen)-0.5)*box_dim[0][0]);
-    ry = abs((dis(gen)-0.5)*box_dim[1][1]);
-    rz = abs((dis(gen)-0.5)*box_dim[2][2]);
+    uniform_real_distribution<> dis_y(0.0, box_dim[1][1]);
+    mt19937 gen_y(seed+1);
+    ry = dis_y(gen_y);
+
+    uniform_real_distribution<> dis_z(0.0, box_dim[2][2]);
+    mt19937 gen_z(seed+2);
+    rz = dis_z(gen_z);
 
     positions.push_back({ rx, ry, rz });
     total_n_atoms = positions.size();
