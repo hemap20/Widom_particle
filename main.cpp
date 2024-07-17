@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     int n_acc = 0;
     int trials = 0;
     //till the insertion happens
-    while(n_acc < n_insert){
+    while(n_acc<n_insert){
         
         //perform insertion
         cout << "inserting main.cpp" << endl;
@@ -95,8 +95,6 @@ int main(int argc, char* argv[]) {
             //     cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
             // }
         }
-
-        
         else{
             //revert to the original positions, pairwise dist, total_num
             if (!positions.empty()) {

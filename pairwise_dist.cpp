@@ -33,7 +33,7 @@ void dist(const int& total_n_atoms, double rc, vector<vector<double>>& box_dim, 
 
                 //cutoff radius
                 if (r < rc) {
-                    //cout << "pushing back pw_dist.cpp" << endl;
+                    cout << "pushing back pw_dist.cpp" << endl;
                     vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
                     PairwiseDistance pd = { i, j, r, unit_r_vec };
                     //cout << " r vec: " << dx << " " << dy << " " << dz << endl; 
