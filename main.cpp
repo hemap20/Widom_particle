@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     //PE for the current configuration
     double PE_old = 0;
     PE_old = pot_energy(pairwise_distances, rc);
-    cout<< "PE_old " << PE_old << endl;
+    cout << "PE_old " << PE_old << endl;
 
     //within the loop
     int n_acc = 0;
@@ -83,8 +83,15 @@ int main(int argc, char* argv[]) {
             cout<< "PE_new " << PE_new << endl;
             cout << "registered" << endl;
             PE_old = PE_new;
-
+            for (const auto& item : pairwise_distances) {
+                int i = get<0>(item);
+                int j = get<1>(item);
+                double r = get<2>(item);
+                cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
+            }
         }
+
+        
         else{
             //revert to the original positions, pairwise dist, total_num
             if (!positions.empty()) {

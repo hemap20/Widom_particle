@@ -35,6 +35,7 @@ void dist(const int& total_n_atoms, double rc, vector<vector<double>>& box_dim, 
                 //distance r
                 double r = 0;
                 r = sqrt(dx*dx + dy*dy + dz*dz);
+                cout << "r = " << r << endl;
 
                 //cutoff radius
                 if (r < rc) {
