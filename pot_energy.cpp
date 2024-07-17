@@ -12,6 +12,7 @@ using namespace std;
 //take values from pairwise_distances
 double pot_energy(const vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances, double rc){
     
+    cout << "pot energy called" << endl; 
     double pot_energy_total = 0; 
     double rc_3 = 1.0 / (rc * rc * rc);
     double ecut = 4 * (rc_3 * rc_3 * rc_3 * rc_3 - rc_3 * rc_3);

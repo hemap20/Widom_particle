@@ -64,9 +64,11 @@ int main(int argc, char* argv[]) {
     while(n_acc < n_insert){
         
         //perform insertion
+        cout << "inserting main.cpp" << endl;
         insert_atom(seed, total_n_atoms, box_dim, positions);
 
         //compute updated distances
+        cout << "updated distances main.cpp" << endl;
         pairwise_distances.clear();
         dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
 
@@ -86,11 +88,13 @@ int main(int argc, char* argv[]) {
         else{
             //revert to the original positions, pairwise dist, total_num
             if (!positions.empty()) {
+                cout << "popping back main.cpp" << endl;
                 positions.pop_back();
                 total_n_atoms = positions.size();
             }
-            pairwise_distances.clear();
-            dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+            cout << "back to old dist main.cpp" << endl;
+            //pairwise_distances.clear();
+            //dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
             
         }
         trials++;
