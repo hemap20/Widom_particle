@@ -15,7 +15,11 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    (void)argc;
+    //(void)argc;
+    if (argc < 7) {
+        cerr << "Usage: " << argv[0] << " <input_name> <output_name> <rc> <kT> <n_insert> <seed>" << endl;
+        return 1;  // Exit with error code indicating incorrect usage
+    }
     string input_name = argv[1];
     string output_name = argv[2];
     double rc = stod(argv[3]);
@@ -78,17 +82,18 @@ int main(int argc, char* argv[]) {
     
         uniform_real_distribution<> dis_real(0.0, 1.0);
 
+        //conditionally accept
         if(dis_real(gen) < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; //register the insertion
             cout<< "PE_new " << PE_new << endl;
             cout << "registered" << endl;
             PE_old = PE_new;
-            for (const auto& item : pairwise_distances) {
-                int i = get<0>(item);
-                int j = get<1>(item);
-                double r = get<2>(item);
-                cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
-            }
+            // for (const auto& item : pairwise_distances) {
+            //     int i = get<0>(item);
+            //     int j = get<1>(item);
+            //     double r = get<2>(item);
+            //     cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
+            // }
         }
 
         
