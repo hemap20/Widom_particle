@@ -28,9 +28,9 @@ int main(int argc, char* argv[]) {
     int seed = stoi(argv[6]);
 
     // Start time
-    auto start_time = chrono::high_resolution_clock::now();
-    auto start_time_str = chrono::system_clock::to_time_t(start_time);
-    cout << "Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
+    // auto start_time = chrono::high_resolution_clock::now();
+    // auto start_time_str = chrono::system_clock::to_time_t(start_time);
+    // cout << "Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
 
     // Declare variables
     vector<string> atom_name;
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
         uniform_real_distribution<> dis_real(0.0, 1.0);
         double R = dis_real(gen);
         //conditionally accept
-        if( R/8 < exp(-beta*(PE_new-PE_old))){ 
+        if( R < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; //register the insertion
             cout<< "PE_new " << PE_new << endl;
             PE_old = PE_new;
@@ -100,17 +100,19 @@ int main(int argc, char* argv[]) {
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     
     // End time
-    auto end_time = chrono::high_resolution_clock::now();
-    auto end_time_str = chrono::system_clock::to_time_t(end_time);
-    cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
+    // auto end_time = chrono::high_resolution_clock::now();
+    // auto end_time_str = chrono::system_clock::to_time_t(end_time);
+    // cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
 
     // Print processing time
-    chrono::duration<double> elapsed_time = end_time - start_time;
-    cout << "Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
+    // chrono::duration<double> elapsed_time = end_time - start_time;
+    // cout << "Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
 
     return 0;
 }
 //distances need to be scaled
+//PE has to be scaled
+//density has to be scaled
 //set the isotherm
 //set the density
 
