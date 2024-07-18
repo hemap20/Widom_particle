@@ -88,12 +88,6 @@ int main(int argc, char* argv[]) {
             cout<< "PE_new " << PE_new << endl;
             cout << "registered" << endl;
             PE_old = PE_new;
-            // for (const auto& item : pairwise_distances) {
-            //     int i = get<0>(item);
-            //     int j = get<1>(item);
-            //     double r = get<2>(item);
-            //     cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
-            // }
         }
         else{
             //revert to the original positions, pairwise dist, total_num
@@ -103,9 +97,6 @@ int main(int argc, char* argv[]) {
                 total_n_atoms = positions.size();
             }
             cout << "back to old dist main.cpp" << endl;
-            //pairwise_distances.clear();
-            //dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
-            
         }
         trials++;
     }
@@ -133,6 +124,4 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-//optimise the N2 loops by using parallelisation
-//take an avegage in the end
 
