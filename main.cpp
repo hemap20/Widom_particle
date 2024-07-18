@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
         uniform_real_distribution<> dis_real(0.0, 1.0);
         double R = dis_real(gen);
         //conditionally accept
-        if( R/2 < exp(-beta*(PE_new-PE_old))){ 
+        if( R/8 < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; //register the insertion
             cout<< "PE_new " << PE_new << endl;
             PE_old = PE_new;
@@ -110,5 +110,7 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
+//distances need to be scaled
+//set the isotherm
+//set the density
 
