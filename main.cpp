@@ -63,13 +63,14 @@ int main(int argc, char* argv[]) {
 
     //within the loop
     int n_acc = 0;
-    int trials = 0;
+    int trials = 5;
     //till the insertion happens
-    while(n_acc<n_insert){
+    //while(n_acc<n_insert){
+    for(int i=0; i<trials; i++){
         
         //perform insertion
         cout << "inserting main.cpp" << endl;
-        insert_atom(seed, total_n_atoms, box_dim, positions);
+        insert_atom(total_n_atoms, box_dim, positions);
 
         //compute updated distances
         cout << "updated distances main.cpp" << endl;
@@ -77,7 +78,7 @@ int main(int argc, char* argv[]) {
         dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
 
         //PE for current configuration
-        double PE_new = 0;
+        double PE_new = 0;while(n_acc<n_insert)
         PE_new = pot_energy(pairwise_distances, rc);
     
         uniform_real_distribution<> dis_real(0.0, 1.0);
@@ -98,7 +99,7 @@ int main(int argc, char* argv[]) {
             }
             cout << "back to old dist main.cpp" << endl;
         }
-        trials++;
+        //trials++;
     }
 
     /* outside the loop: PE_old: find the current energy of the system

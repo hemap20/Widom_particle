@@ -15,6 +15,6 @@
 
 using namespace std;
 
-void insert_atom(int seed, int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions);
+void insert_atom(int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions);
 
 #endif
