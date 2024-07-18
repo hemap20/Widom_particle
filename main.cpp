@@ -16,7 +16,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     //(void)argc;
-    if (argc < 7) {
+    if (argc < 6) {
         cerr << "Usage: " << argv[0] << " <input_name> <output_name> <rc> <kT> <n_insert> <seed>" << endl;
         return 1;  // Exit with error code indicating incorrect usage
     }
@@ -24,9 +24,8 @@ int main(int argc, char* argv[]) {
     string output_name = argv[2];
     double rc = stod(argv[3]);
     double kT = stod(argv[4]);
-    int n_insert = stoi(argv[5]);
-    int seed = stoi(argv[6]);
-    //bool print_flag = (stoi(argv[7]) != 0);
+    //int n_insert = stoi(argv[5]);
+    int seed = stoi(argv[5]);
 
     // // Start time
     // auto start_time = chrono::high_resolution_clock::now();
@@ -62,23 +61,29 @@ int main(int argc, char* argv[]) {
     cout << "PE_old " << PE_old << endl;
 
     //within the loop
-    int n_acc = 0;
-    int trials = 5;
+    //int n_acc = 0;
+    int trials = 20;
     //till the insertion happens
     //while(n_acc<n_insert){
-    for(int i=0; i<trials; i++){
+    for(int n_acc=0; n_acc<trials){
         
         //perform insertion
-        cout << "inserting main.cpp" << endl;
+        //cout << "inserting main.cpp" << endl;
         insert_atom(total_n_atoms, box_dim, positions);
 
         //compute updated distances
-        cout << "updated distances main.cpp" << endl;
+        //cout << "updated distances main.cpp" << endl;
         pairwise_distances.clear();
         dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+        // for (const auto& item : pairwise_distances) {
+        //     int i = get<0>(item);
+        //     int j = get<1>(item);
+        //     double r = get<2>(item);
+        //     cout << "i = " << i << ", j = " << j << ", r = " << r << endl;
+        // }
 
         //PE for current configuration
-        double PE_new = 0;while(n_acc<n_insert)
+        double PE_new = 0;
         PE_new = pot_energy(pairwise_distances, rc);
     
         uniform_real_distribution<> dis_real(0.0, 1.0);
@@ -87,17 +92,18 @@ int main(int argc, char* argv[]) {
         if(dis_real(gen) < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; //register the insertion
             cout<< "PE_new " << PE_new << endl;
-            cout << "registered" << endl;
+            //cout << "registered" << endl;
             PE_old = PE_new;
         }
         else{
             //revert to the original positions, pairwise dist, total_num
             if (!positions.empty()) {
-                cout << "popping back main.cpp" << endl;
+                //cout << "popping back main.cpp" << endl;
                 positions.pop_back();
                 total_n_atoms = positions.size();
             }
-            cout << "back to old dist main.cpp" << endl;
+            dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+            //cout << "back to old dist main.cpp" << endl;
         }
         //trials++;
     }

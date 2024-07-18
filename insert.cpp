@@ -20,39 +20,42 @@ set<double> generatedDoubles;
 void insert_atom(int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions){
     double rx = 0, ry = 0, rz = 0;
     
-    static uniform_real_distribution<> dis(0.0, 1.0);
     static mt19937 gen(std::random_device{}());
     
     for(int i=0; i<3; i++){
         if(i==0){
             double newDouble;
             do {
-                newDouble = dis(gen);
+                static uniform_real_distribution<> dis_x(0.001, box_dim[0][0]);
+                newDouble = dis_x(gen);
             } while (!generatedDoubles.insert(newDouble).second);
-            rx = newDouble;
+            rx = abs(newDouble);
         }
         else if(i==1){
             double newDouble;
             do {
-                newDouble = dis(gen);
+                static uniform_real_distribution<> dis_y(0.001, box_dim[1][1]);
+                newDouble = dis_y(gen);
             } while (!generatedDoubles.insert(newDouble).second);
-            ry = newDouble;
+            ry = abs(newDouble);
         }
         else{
             double newDouble;
             do {
-                newDouble = dis(gen);
+                static uniform_real_distribution<> dis_z(0.001, box_dim[2][2]);
+                newDouble = dis_z(gen);
             } while (!generatedDoubles.insert(newDouble).second);
-            rz = newDouble;
+            rz = abs(newDouble);
         }
     }
    
-    rx = abs((rx - 0.5)*box_dim[0][0]);
-    ry = abs((ry - 0.5)*box_dim[1][1]);
-    rz = abs((rz - 0.5)*box_dim[2][2]);
+    // rx = abs((rx - 0.5)*box_dim[0][0]);
+    // ry = abs((ry - 0.5)*box_dim[1][1]);
+    // rz = abs((rz - 0.5)*box_dim[2][2]);
     
-    cout << "pushing back insert.cpp" << endl;
+    //cout << "pushing back insert.cpp" << endl;
     positions.push_back({ rx, ry, rz });
     total_n_atoms = positions.size();
+    cout << "total_n_atoms: " << total_n_atoms << endl;
 
 }
