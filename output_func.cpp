@@ -30,12 +30,6 @@ void print_CONTCAR( const string filename, const vector<string> atom_name, int n
         output << "\t" << box_dim[i][0] << " " << box_dim[i][1] << " " << box_dim[i][2] << endl;
     }
 
-    // // Print number of atoms per type
-    // for (int i = 0; i < n_atom_types; ++i) {
-    //     output << n_atoms_per_type[i] << " ";
-    // }
-    // output << endl;
-
     // Print coordinate system
     output << coordinate_sys << endl;
 
