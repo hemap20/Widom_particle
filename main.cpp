@@ -62,11 +62,13 @@ int main(int argc, char* argv[]) {
 
     //within the loop
     int trials = 0;
+    double step_size = 1.0;
+    int accepted_moves = 0;
     //till the insertion happens
     for(int n_acc=0; n_acc<n_insert;){
         
         //perform insertion
-        insert_atom(total_n_atoms, box_dim, positions);
+        insert_atom(total_n_atoms, box_dim, positions, step_size);
 
         //compute updated distances
         pairwise_distances.clear();
@@ -79,8 +81,9 @@ int main(int argc, char* argv[]) {
         uniform_real_distribution<> dis_real(0.0, 1.0);
         double R = dis_real(gen);
         //conditionally accept
-        if( R < exp(-beta*(PE_new-PE_old))){ 
-            n_acc++; //register the insertion
+        if( R/4 < exp(-beta*(PE_new-PE_old))){ 
+            n_acc++; 
+            accepted_moves++;//register the insertion
             cout<< "PE_new " << PE_new << endl;
             PE_old = PE_new;
         }
@@ -93,9 +96,26 @@ int main(int argc, char* argv[]) {
             dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
         }
         trials++;
+
+        if (trials % 1000 == 0) {
+            double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
+            cout << "Step: " << trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
+
+            if (acceptance_ratio < 0.3) {
+                step_size *= 0.9; // Decrease step size
+            } else if (acceptance_ratio > 0.5) {
+                step_size *= 1.1; // Increase step size
+            }
+
+            // Reset counters
+            trials = 0;
+            accepted_moves = 0;
+        }
     }
     
     cout << trials << " number of trials " << endl; 
+    double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
+    cout << "Step: " << trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
     //print the updated contcar
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     
