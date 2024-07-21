@@ -62,8 +62,10 @@ int main(int argc, char* argv[]) {
 
     //within the loop
     int trials = 0;
+    int total_trials = 0;
     double step_size = 1.0;
     int accepted_moves = 0;
+    int total_accepted_moves = 0;
     //till the insertion happens
     for(int n_acc=0; n_acc<n_insert;){
         
@@ -84,6 +86,7 @@ int main(int argc, char* argv[]) {
         if( R/4 < exp(-beta*(PE_new-PE_old))){ 
             n_acc++; 
             accepted_moves++;//register the insertion
+            total_accepted_moves++;
             cout<< "PE_new " << PE_new << endl;
             PE_old = PE_new;
         }
@@ -96,6 +99,7 @@ int main(int argc, char* argv[]) {
             dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
         }
         trials++;
+        total_trials++;
 
         if (trials % 1000 == 0) {
             double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
@@ -113,9 +117,10 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    cout << trials << " number of trials " << endl; 
-    double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
-    cout << "Step: " << trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
+    //cout << trials << " number of trials " << endl; 
+    //cout << total_trials << " total number of trials " << endl;
+    double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_accepted_moves;
+    cout << "total steps: " << trials << ", avg Acceptance Ratio: " << acceptance_ratio << endl;
     //print the updated contcar
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     
