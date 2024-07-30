@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <chrono>
@@ -60,6 +61,11 @@ int main(int argc, char* argv[]) {
     PE_old = pot_energy(pairwise_distances, rc);
     cout << "PE_old " << PE_old << endl;
 
+    ofstream csvFile;
+    csvFile.open("PE.csv");
+    csvFile << "PE, no_atom" << endl;
+    csvFile << PE_old << " ," << total_n_atoms <<endl;
+
     //within the loop
     int trials = 0;
     int total_trials = 0;
@@ -87,7 +93,8 @@ int main(int argc, char* argv[]) {
             n_acc++; 
             accepted_moves++;//register the insertion
             total_accepted_moves++;
-            cout<< "PE_new " << PE_new << endl;
+            //cout<< "PE_new " << PE_new << endl;
+            csvFile << PE_new << " ," << total_n_atoms << endl;
             PE_old = PE_new;
         }
         else{
@@ -116,9 +123,10 @@ int main(int argc, char* argv[]) {
             accepted_moves = 0;
         }
     }
+    csvFile.close();
     
     //cout << trials << " number of trials " << endl; 
-    //cout << total_trials << " total number of trials " << endl;
+    cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_accepted_moves;
     cout << "total steps: " << trials << ", avg Acceptance Ratio: " << acceptance_ratio << endl;
     //print the updated contcar
