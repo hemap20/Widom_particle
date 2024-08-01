@@ -1,8 +1,29 @@
+/* 
+   Metropolis Monte Carlo simulation of a Lennard-Jones fluid
+   with Widom test-particle insertion to compute mu_ex
+
+   Cameron F. Abrams
+
+   Written for the course CHE T580, Modern Molecular Simulation
+   Spring 20-21
+
+   compile using "gcc -o mclj_widom mclj_widom.c -lm -lgsl"
+
+   runs as "./mclj_widom -N <number_of_particles> -rho <density> \
+                    -nc <numcycles(1e6)>  -dr <delta-r> \
+		                -s <seed(?)> -ne <#equil.cycles(100)>"
+
+   You must have the GNU Scientific Library installed.
+
+   Drexel University, Department of Chemical Engineering
+   Philadelphia
+   (c) 2004-2021
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-//#include <gsl/gsl_rng.h>
+#include <gsl/gsl_rng.h>
 
 /* energy of particle i */
 double e_i ( int i, double * rx, double * ry, double * rz, int N, double L,
@@ -241,13 +262,13 @@ int main ( int argc, char * argv[] ) {
   }
   for (c=0;c<nCycles;c++) {
     /* Randomly select a particle */
-    i=(int)gsl_rng_uniform_int(r,N);                                                                                                    
+    i=(int)gsl_rng_uniform_int(r,N);
     /* calculate displacement */
     dx = dr*(0.5-gsl_rng_uniform(r));
     dy = dr*(0.5-gsl_rng_uniform(r));
     dz = dr*(0.5-gsl_rng_uniform(r));
     //printf("%d %.6lf %.6lf %.6lf\n",i,dx,dy,dz);
-    ei_old=e_i(i,rx,ry,rz,N,L,rc2,tailcei_neworr,ecor,shift,ecut,&ivir_old,0);
+    ei_old=e_i(i,rx,ry,rz,N,L,rc2,tailcorr,ecor,shift,ecut,&ivir_old,0);
     /* Save the current position of particle i */
     rxold=rx[i];
     ryold=ry[i];

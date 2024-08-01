@@ -23,8 +23,9 @@ int main(int argc, char* argv[]) {
     }
     string input_name = argv[1];
     string output_name = argv[2];
-    double rc = stod(argv[3]);
-    double kT = stod(argv[4]);
+    //double rc = stod(argv[3]);
+    double T = stod(argv[3]);
+    double rho = stod(argv[4]);
     int n_insert = stoi(argv[5]);
     int seed = stoi(argv[6]);
 
@@ -45,7 +46,10 @@ int main(int argc, char* argv[]) {
     vector<double> distances;
     vector<tuple<int, int, double, vector<PairwiseDistance> > > pairwise_distances;
     vector<tuple<int, double, vector<PairwiseForce> > > pairwise_forces;    
-    double beta = 1/kT;
+    
+    const k=8.617e-5;
+    double beta = 1/(k*T);
+    const double e = (k*T)/1.2;
 
     //generate a random number
     mt19937 gen(seed);
@@ -53,18 +57,22 @@ int main(int argc, char* argv[]) {
     // Read input
     read_input(input_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, n_atoms_per_type, coordinate_sys, positions);
 
+    const double V = box_dim[0][0]*box_dim[1][1]*box_dim[2][2];
+    const double s_3 = rho*V/(total_n_atoms-1);
+    const double s = pow(s_3, 1.0/3.0);
+
     //compute distances
-    dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+    dist(total_n_atoms, box_dim, positions, pairwise_distances);
 
     //PE for the current configuration
     double PE_old = 0;
-    PE_old = pot_energy(pairwise_distances, rc);
-    cout << "PE_old " << PE_old << endl;
+    PE_old = pot_energy(pairwise_distances);
+    //cout << "PE_old " << PE_old << endl;
 
     ofstream csvFile;
     csvFile.open("PE.csv");
-    csvFile << "PE, no_atom" << endl;
-    csvFile << PE_old << " ," << total_n_atoms <<endl;
+    csvFile << "PE, step" << endl;
+    //csvFile << PE_old << " ," << 0 <<endl;
 
     //within the loop
     int trials = 0;
@@ -80,11 +88,11 @@ int main(int argc, char* argv[]) {
 
         //compute updated distances
         pairwise_distances.clear();
-        dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+        dist(total_n_atoms,box_dim, positions, pairwise_distances);
 
         //PE for current configuration
         double PE_new = 0;
-        PE_new = pot_energy(pairwise_distances, rc);
+        PE_new = pot_energy(pairwise_distances);
     
         uniform_real_distribution<> dis_real(0.0, 1.0);
         double R = dis_real(gen);
@@ -94,7 +102,7 @@ int main(int argc, char* argv[]) {
             accepted_moves++;//register the insertion
             total_accepted_moves++;
             //cout<< "PE_new " << PE_new << endl;
-            csvFile << PE_new << " ," << total_n_atoms << endl;
+            csvFile << PE_new << " ," << total_trials << endl;
             PE_old = PE_new;
         }
         else{
@@ -103,32 +111,33 @@ int main(int argc, char* argv[]) {
                 positions.pop_back();
                 total_n_atoms = positions.size();
             }
-            dist(total_n_atoms, rc, box_dim, positions, pairwise_distances);
+            dist(total_n_atoms,box_dim, positions, pairwise_distances);
         }
         trials++;
         total_trials++;
 
-        if (trials % 1000 == 0) {
-            double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
-            cout << "Step: " << trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
+    
+        double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
+        cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
 
-            if (acceptance_ratio < 0.3) {
-                step_size *= 0.9; // Decrease step size
-            } else if (acceptance_ratio > 0.5) {
-                step_size *= 1.1; // Increase step size
-            }
-
+        if (acceptance_ratio < 0.3) {
+            step_size *= 0.9; // Decrease step size
             // Reset counters
             trials = 0;
             accepted_moves = 0;
-        }
+        } else if (acceptance_ratio > 0.5) {
+            step_size *= 1.1; // Increase step size
+            // Reset counters
+            trials = 0;
+            accepted_moves = 0;
+        }    
     }
     csvFile.close();
     
     //cout << trials << " number of trials " << endl; 
     cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_accepted_moves;
-    cout << "total steps: " << trials << ", avg Acceptance Ratio: " << acceptance_ratio << endl;
+    cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
     //print the updated contcar
     print_CONTCAR(output_name, atom_name, n_atom_types, total_n_atoms, value, box_dim, coordinate_sys, positions);
     

@@ -11,6 +11,6 @@
 
 using namespace std;
 
-double pot_energy(const vector<tuple<int, int, double, vector<PairwiseDistance> > >& pairwise_distances, double rc);
+double pot_energy(const double e, const double s, const vector<tuple<int, int, double, vector<PairwiseDistance> > >& pairwise_distances);
 
 #endif 

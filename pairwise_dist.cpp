@@ -10,7 +10,7 @@ using namespace std;
 
 //compare with cutoff radius, check PBC, compute the distance
 //start from i0
-void dist(const int& total_n_atoms, double rc, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){
+void dist(const int& total_n_atoms, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances){
     pairwise_distances.clear();
     for(int i=0; i<total_n_atoms; i++){
         for(int j=0; j<total_n_atoms; j++){
@@ -28,14 +28,11 @@ void dist(const int& total_n_atoms, double rc, vector<vector<double>>& box_dim, 
                 //distance r
                 double r = 0;
                 r = sqrt(dx*dx + dy*dy + dz*dz);
-
-                //cutoff radius
-                if (r < rc) {
-                    vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
-                    PairwiseDistance pd = { i, j, r, unit_r_vec };
-                    //all the pairs are listed out that have r < rc, repetition is there
-                    pairwise_distances.push_back(make_tuple(i, j, r, vector<PairwiseDistance>{pd}));
-                }
+                
+                vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
+                PairwiseDistance pd = { i, j, r, unit_r_vec };
+                //all the pairs are listed out that have r < rc, repetition is there
+                pairwise_distances.push_back(make_tuple(i, j, r, vector<PairwiseDistance>{pd}));
             }
         }
     }
