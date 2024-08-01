@@ -62,11 +62,11 @@ int main(int argc, char* argv[]) {
     const double s = pow(s_3, 1.0/3.0);
 
     //compute distances
-    dist(total_n_atoms, box_dim, positions, pairwise_distances);
+    //dist(total_n_atoms, box_dim, positions, pairwise_distances);
 
     //PE for the current configuration
     double PE_old = 0;
-    PE_old = pot_energy(pairwise_distances);
+    PE_old = total_e(e, s, total_n_atoms, box_dim, positions, pairwise_distances);
     //cout << "PE_old " << PE_old << endl;
 
     ofstream csvFile;
@@ -87,12 +87,12 @@ int main(int argc, char* argv[]) {
         insert_atom(total_n_atoms, box_dim, positions, step_size);
 
         //compute updated distances
-        pairwise_distances.clear();
-        dist(total_n_atoms,box_dim, positions, pairwise_distances);
+        // pairwise_distances.clear();
+        // dist(total_n_atoms,box_dim, positions, pairwise_distances);
 
         //PE for current configuration
         double PE_new = 0;
-        PE_new = pot_energy(pairwise_distances);
+        PE_new = e_i(total_n_atoms, s, total_n_atoms, box_dim, positions, pairwise_distances);
     
         uniform_real_distribution<> dis_real(0.0, 1.0);
         double R = dis_real(gen);
@@ -116,7 +116,6 @@ int main(int argc, char* argv[]) {
         trials++;
         total_trials++;
 
-    
         double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
         cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
 
@@ -157,4 +156,8 @@ int main(int argc, char* argv[]) {
 //density has to be scaled
 //set the isotherm
 //set the density
+
+
+//analytical vs the code PE
+//equation of state vs the test particle insertion method
 
