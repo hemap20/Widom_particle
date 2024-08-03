@@ -26,4 +26,14 @@ function widom:
     wtest = wtest + exp(-β * entest)
     μex = − ln(wtest/M)/β
 
+function MC:
+    for 1<= i <= n_insert
+        trialmove
+        if i%1000 == 0
+            if (acceptance_ratio < 0.3)
+                step_size *= 0.9; // Decrease step size
+            else if (acceptance_ratio > 0.5)
+                step_size *= 1.1; // Increase step size    
+            widom
+        
 */
