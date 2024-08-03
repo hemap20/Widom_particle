@@ -1,4 +1,4 @@
-/*
+
 function trialmove:
     i = random number from 0 to total_n_atoms
     en_0 = energy(x_i, i) -> energy of atom i
@@ -21,9 +21,7 @@ function energy:
     return PE
 
 function widom:
-    x_test = randomly generate a coordinate for the test atom
-    en_0 = energy(x_test, total_n_atoms+1)
-    wtest = wtest + exp(-β * entest)
+    w_test = wtest + exp(-β * entest)
     μex = − ln(wtest/M)/β
 
 function MC:
@@ -35,5 +33,4 @@ function MC:
             else if (acceptance_ratio > 0.5)
                 step_size *= 1.1; // Increase step size    
             widom
-        
-*/
+    

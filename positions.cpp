@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include "positions.h"
 
 using namespace std;
 
