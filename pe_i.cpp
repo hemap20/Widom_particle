@@ -1,5 +1,6 @@
 #include "pe_i.h"
 #include <iostream>
+#include <cmath>
 #include <vector>
 
 using namespace std;

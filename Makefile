@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++11 -Wall -Wextra
 TARGET = main
 
 # Source files
-SRCS = main.cpp rand_pos.cpp positions.cpp pe_i.cpp
+SRCS = main.cpp rand_pos.cpp positions.cpp pe_i.cpp output_func.cpp
 # Object files
 OBJS = $(SRCS:.cpp=.o)
 

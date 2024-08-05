@@ -9,22 +9,24 @@
 #include "pe_i.h"
 #include "positions.h"
 #include "rand_pos.h"
+#include "output_func.h"
+
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
     //(void)argc;
-    if (argc < 6) {
+    if (argc < 7) {
         cerr << "Usage: " << argv[0] << " <input_name> <output_name> <rc> <kT> <n_insert> <seed>" << endl;
         return 1;  // Exit with error code indicating incorrect usage
     }
 
     string output_name = argv[1];
-    int total_n_atoms = stoi(argv[3]);
-    double T = stod(argv[2]);
-    double rho = stod(argv[3]);
-    int seed = stoi(argv[4]);
-    int num_trails = stoi(argv[5]);
+    int total_n_atoms = stoi(argv[2]);
+    double T = stod(argv[3]);
+    double rho = stod(argv[4]);
+    int seed = stoi(argv[5]);
+    int num_trails = stoi(argv[6]);
 
     // Start time
     // auto start_time = chrono::high_resolution_clock::now();
@@ -55,6 +57,9 @@ int main(int argc, char* argv[]) {
     // generate positions
     generateParticles(positions, total_n_atoms, rho, box_dim);
 
+    //print the initial positions
+    print_CONTCAR(output_name, total_n_atoms, box_dim, positions);
+
     //within the loop
     int trials = 0;
     int total_trials = 0;
@@ -63,7 +68,7 @@ int main(int argc, char* argv[]) {
     int total_accepted_moves = 0;
     double w = 0;
     //till the insertion happens
-    while(total_accepted_moves < num_trails){
+    for(int j = 0; j < num_trails; j++) {
         
         int i = rand() % total_n_atoms;
 
@@ -95,6 +100,7 @@ int main(int argc, char* argv[]) {
         if (R < exp(-beta * (en_new - en_0))) {
             // Accept the move, position is already updated
             w += exp(-beta * en_new);
+            cout << "en_new " << en_new << endl;
             accepted_moves++;//register the insertion
             total_accepted_moves++;
         } 
@@ -106,18 +112,19 @@ int main(int argc, char* argv[]) {
         total_trials++;
         
         double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
-        cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
-
+        
         if (acceptance_ratio < 0.3) {
             step_size *= 0.9; // Decrease step size
             // Reset counters
             trials = 0;
             accepted_moves = 0;
+            cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
         } else if (acceptance_ratio > 0.5) {
             step_size *= 1.1; // Increase step size
             // Reset counters
             trials = 0;
             accepted_moves = 0;
+            cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
         }    
     }
     
@@ -125,7 +132,7 @@ int main(int argc, char* argv[]) {
     cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_trials;
     cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
-    cout << "w" << w << endl;
+    cout << "w " << w << endl;
     
     // End time
     // auto end_time = chrono::high_resolution_clock::now();
