@@ -10,7 +10,6 @@
 
 using namespace std;
 
-
 void generateParticles(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim);
 
 #endif

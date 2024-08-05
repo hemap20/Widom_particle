@@ -32,8 +32,18 @@ int main(int argc, char* argv[]) {
     // cout << "Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
 
     // Declare variables
-    vector<vector<double> > box_dim = {{15, 0, 0}, {0, 15, 0}, {0, 0, 15}};
-    vector<vector<double> > positions;
+    vector<vector<double> > box_dim(3, vector<double>(3));
+    box_dim[0][0] = 15;
+    box_dim[0][1] = 0;
+    box_dim[0][2] = 0;
+    box_dim[1][0] = 0;
+    box_dim[1][1] = 15;
+    box_dim[1][2] = 0;
+    box_dim[2][0] = 0;
+    box_dim[2][1] = 0;
+    box_dim[2][2] = 15;  
+    
+    vector<vector<double> > positions(total_n_atoms, vector<double>(3));
     
     const double k = 8.617e-5;
     const double beta = 1/(k*T);
@@ -64,8 +74,11 @@ int main(int argc, char* argv[]) {
         double y_old = positions[i][1];
         double z_old = positions[i][2];
 
-        double x_new, y_new, z_new;
-        tie(x_new, y_new, z_new) = pos(total_n_atoms, box_dim, positions, step_size);
+        // Generate a new position for atom i
+        Coordinates new_pos = pos(box_dim, step_size);
+        double x_new = new_pos.x;
+        double y_new = new_pos.y;
+        double z_new = new_pos.z;        
         
         positions[i][0] = x_new;
         positions[i][1] = y_new;

@@ -1,14 +1,12 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -Wextra -O2
-
+CXXFLAGS = -std=c++11 -Wall -Wextra
 # Target executable
 TARGET = main
 
 # Source files
-SRCS = main.cpp
-
+SRCS = main.cpp rand_pos.cpp positions.cpp pe_i.cpp
 # Object files
 OBJS = $(SRCS:.cpp=.o)
 

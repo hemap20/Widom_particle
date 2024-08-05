@@ -12,6 +12,7 @@ using namespace std;
 void generateParticles(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim) {
     // Calculate the volume of the system
     double volume = n / density;
+    cout << "vol" << volume << endl;
 
     // Assuming a cubic volume for simplicity
     double Lx = box_dim[0][0];
@@ -25,9 +26,9 @@ void generateParticles(vector<vector<double> > & positions, int n, double densit
     uniform_real_distribution<> dis_z(0.0, Lz);
 
     for (int i = 0; i < n; ++i) {
-        particles[i][0] = dis_x(gen);
-        particles[i][1] = dis_y(gen);
-        particles[i][2] = dis_z(gen);
+        positions[i][0] = dis_x(gen);
+        positions[i][1] = dis_y(gen);
+        positions[i][2] = dis_z(gen);
     }
 
 }
