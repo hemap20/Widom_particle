@@ -1,6 +1,7 @@
 #ifndef RAND_POS_H
 #define RAND_POS_H
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +9,6 @@
 #include <tuple>
 #include <random>
 #include <set>
-#include "rand_pos.h"
 
 using namespace std;
 

@@ -2,35 +2,33 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <random>
 #include <ctime>
 #include "positions.h"
 
 using namespace std;
 
-struct Particle {
-    double x, y, z;
-};
 
-vector<Particle> generateParticles(int n, double density) {
+void generateParticles(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim) {
     // Calculate the volume of the system
     double volume = n / density;
 
     // Assuming a cubic volume for simplicity
-    double side_length = cbrt(volume);
+    double Lx = box_dim[0][0];
+    double Ly = box_dim[1][1];
+    double Lz = box_dim[2][2];
 
-    vector<Particle> particles;
-    particles.reserve(n);
-
-    // Seed the random number generator
-    srand(time(nullptr));
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> dis_x(0.0, Lx);
+    uniform_real_distribution<> dis_y(0.0, Ly);
+    uniform_real_distribution<> dis_z(0.0, Lz);
 
     for (int i = 0; i < n; ++i) {
-        Particle p;
-        p.x = static_cast<double>(std::rand()) / RAND_MAX * side_length;
-        p.y = static_cast<double>(std::rand()) / RAND_MAX * side_length;
-        p.z = static_cast<double>(std::rand()) / RAND_MAX * side_length;
-        particles.push_back(p);
+        particles[i][0] = dis_x(gen);
+        particles[i][1] = dis_y(gen);
+        particles[i][2] = dis_z(gen);
     }
 
-    return particles;
 }
+

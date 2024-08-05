@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,8 +9,6 @@
 #include "rand_pos.h"
 
 using namespace std;
-
-set<double> generatedDoubles;
 
 tuple<double, double, double> pos(int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions, double step_size){
     double x = 0, y = 0, z = 0;

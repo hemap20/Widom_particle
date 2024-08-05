@@ -1,29 +1,34 @@
 # Compiler
 CXX = g++
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -Wextra
-# CFLAGS = -Wall -I~/Codes/basics/Basics/gsl-2.8/gsl  # Adjust the path as necessary
-# GSL library flags
-LIBS = -lm 
+CXXFLAGS = -std=c++11 -Wall -Wextra -O2
 
-# Source files (adjust paths as per your directory structure)
-SRCS = main.cpp input_func.cpp output_func.cpp pairwise_dist.cpp pot_energy.cpp forces.cpp insert.cpp
+# Target executable
+TARGET = main
+
+# Source files
+SRCS = main.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
 
-# Executable
-TARGET = main
+# Header files
+HDRS = pe_i.h positions.h rand_pos.h
 
-# Rule to link the executable
+# Default target
+all: $(TARGET)
+
+# Rule for building the target executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 
-# Rule to compile .C files to .o files
-%.o: %.C
+# Rule for building object files
+%.o: %.cpp $(HDRS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Phony target to clean objects and executable
-.PHONY: clean
+# Clean up
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+# Phony targets
+.PHONY: all clean

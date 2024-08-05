@@ -5,16 +5,12 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <random>
 #include <ctime>
-#include "positions.h"
-
 
 using namespace std;
 
-struct Particle {
-    double x, y, z;
-};
 
-vector<Particle> generateParticles(int n, double density);
+void generateParticles(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim);
 
 #endif
