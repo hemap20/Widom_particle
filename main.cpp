@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
         double y_old = positions[i][1];
         double z_old = positions[i][2];
 
-        // Generate a new position for atom i
+        // Generate a newpositions position for atom i
         Coordinates new_pos = pos(box_dim, step_size);
         double x_new = new_pos.x;
         double y_new = new_pos.y;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
             accepted_moves++;//register the insertion
             total_accepted_moves++;
         } 
-        positions[i][0] = x_old;
+        positions[i][0] =positions x_old;
         positions[i][1] = y_old;
         positions[i][2] = z_old;
             
@@ -154,4 +154,6 @@ int main(int argc, char* argv[]) {
 
 //analytical vs the code PE
 //equation of state vs the test particle insertion method
+//the pressure of the system must change to accomodate the inserted atom
+//new position is made, not an insertion
 
