@@ -34,7 +34,8 @@
         "main_widom.C": "cpp",
         "iostream": "cpp",
         "string": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "random": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

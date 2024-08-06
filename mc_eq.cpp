@@ -3,10 +3,12 @@
 #include <vector>
 #include <cmath>
 #include "pe_i.h"
+#include "random.h"
+#include "mc_eq.h"
 
 using namespace std;
 
-void mc_step(double e, double beta, double s, vector<vector<double> >& box_dim, vector<vector<double> >& positions, int total_n_atoms, double& w, double& step_size, int& trials, int& accepted_moves, int& total_trials, int& total_accepted_moves, int seed){
+void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& w, double& step_size, int& trials, int& accepted_moves,  int seed, double& E){
     int i = rand() % total_n_atoms;
 
     // Calculate the initial energy of atom i
@@ -34,19 +36,21 @@ void mc_step(double e, double beta, double s, vector<vector<double> >& box_dim, 
     double R = dis_real(gen);
 
     // Metropolis acceptance criterion
-    if (R < exp(-beta * (en_new - en_0))) {
+    if ((en_0>en_new) || (R < exp(-beta * (en_new - en_0)))) {
         // Accept the move, position is already updated
         w += exp(-beta * en_new);
-        cout << "en_new " << en_new << endl;
+        // cout << "en_new " << en_new << endl;
         accepted_moves++;//register the insertion
-        total_accepted_moves++;
-    } 
-    positions[i][0] = x_old;
-    positions[i][1] = y_old;
-    positions[i][2] = z_old;
+        E += en_new - en_0;
         
+    }
+    else{
+        positions[i][0] = x_old;
+        positions[i][1] = y_old;
+        positions[i][2] = z_old;
+    }  
     trials++;
-    total_trials++;
+    
     
     double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
     
