@@ -118,13 +118,13 @@ int main(int argc, char* argv[]) {
             // Reset counters
             trials = 0;
             accepted_moves = 0;
-            cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
+            //cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
         } else if (acceptance_ratio > 0.5) {
             step_size *= 1.1; // Increase step size
             // Reset counters
             trials = 0;
             accepted_moves = 0;
-            cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
+            //cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
         }    
     }
     

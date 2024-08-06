@@ -33,7 +33,8 @@
         "insert.C": "cpp",
         "main_widom.C": "cpp",
         "iostream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ctime": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

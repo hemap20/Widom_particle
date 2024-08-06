@@ -2,13 +2,13 @@
 #include <vector>
 #include <random>
 #include <set>
-#include "rand_pos.h"
+#include "random.h"
 
 using namespace std;
 
 set<double> generatedDoubles;
 
-Coordinates pos(vector<vector<double> >& box_dim, double step_size){
+Coordinates random(vector<vector<double> >& box_dim, double step_size){
 
     double x = 0, y = 0, z = 0;
     static random_device rd;  // Initialize random device

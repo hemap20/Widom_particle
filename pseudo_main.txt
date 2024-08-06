@@ -1,4 +1,3 @@
-
 function trialmove:
     i = random number from 0 to total_n_atoms
     en_0 = energy(x_i, i) -> energy of atom i

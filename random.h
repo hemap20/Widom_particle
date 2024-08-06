@@ -1,5 +1,5 @@
-#ifndef RAND_POS_H
-#define RAND_POS_H
+#ifndef RANDOM_H
+#define RANDOM_H
 
 #include <iostream>
 #include <vector>
@@ -15,6 +15,6 @@ struct Coordinates {
 
 extern set<double> generatedDoubles;
 
-Coordinates pos(vector<vector<double> >& box_dim, double step_size);
+Coordinates random(vector<vector<double> >& box_dim, double step_size);
 
 #endif

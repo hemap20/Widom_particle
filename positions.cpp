@@ -9,7 +9,7 @@
 using namespace std;
 
 
-void generateParticles(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim) {
+void positions(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim) {
     // Calculate the volume of the system
     double volume = n / density;
     cout << "vol" << volume << endl;
