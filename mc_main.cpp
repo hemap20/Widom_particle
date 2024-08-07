@@ -12,13 +12,14 @@
 #include "output_func.h"
 #include "mc_eq.h"
 #include "pe_total.h"
+#include "mc_move.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
     //(void)argc;
-    if (argc < 6) {
-        cerr << "Usage: " << argv[0] << " <output_name> <total_n_atoms> <T> <rho> <seed>" << endl;
+    if (argc < 7) {
+        cerr << "Usage: " << argv[0] << " <output_name> <total_n_atoms> <T> <rho> <seed> <num_moves>" << endl;
         return 1;  // Exit with error code indicating incorrect usage
     }
 
@@ -27,6 +28,7 @@ int main(int argc, char* argv[]) {
     double T = stod(argv[3]);
     double rho = stod(argv[4]);
     int seed = stoi(argv[5]);
+    int num_moves = stoi(argv[6]);
     
 
     // Declare variables
@@ -55,6 +57,7 @@ int main(int argc, char* argv[]) {
 
     //initial energy
     double E = total_e(e, box_dim, s, positions, total_n_atoms);
+    double sum_E = E;
 
     //print the initial positions
     print_CONTCAR(output_name, total_n_atoms, box_dim, positions);
@@ -63,10 +66,9 @@ int main(int argc, char* argv[]) {
     int trials = 0;
     double step_size = 1.0;
     int accepted_moves = 0;
-    double w = 0;
     
-    ofstream PE("PE.csv");
-    PE << "PE, time" << endl;
+    ofstream PE("PE_eq.csv");
+    PE << "PE, avg_PE, time" << endl;
 
     // Record the start time
     // Start time
@@ -74,49 +76,79 @@ int main(int argc, char* argv[]) {
     auto start_time_str = chrono::system_clock::to_time_t(start_time);
 
     //equilibration
-    int total_trials = 10000;
+    int num_eq = 2000;
     int total_accepted_moves = 0;
-    for(int j = 0; j < total_trials; j++) {
-        mc_eq(e, beta, s, box_dim, positions, total_n_atoms, w, step_size, trials, accepted_moves, total_accepted_moves, seed, E);  
+    for(int j = 1; j < num_eq+1; j++) {
+        mc_eq(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, sum_E);  
         // Record the current time and calculate elapsed time
         auto current_time = chrono::system_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
-        PE << E << "," << elapsed.count() << endl;
+        PE << E << " ," << sum_E/total_accepted_moves << " ," << elapsed.count() << endl;
     }
     
-    print_CONTCAR("EQUBM", total_n_atoms, box_dim, positions);
 
-    //cout << trials << " number of trials " << endl; 
-    // cout << total_trials << " total number of trials " << endl;
-    // double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_trials;
-    // cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
-    cout << "avg w: " << w/total_trials << endl;
-    
     //print start time
-    cout << "Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
+    cout << "Eq Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
 
     // End time
     auto end_time = chrono::system_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
-    cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
+    cout << "Eq End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
     
     // Print processing time
     chrono::duration<double> elapsed_time = end_time - start_time;
-    cout << "Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
+    cout << "Eq Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
+    print_CONTCAR("EQUBM", total_n_atoms, box_dim, positions);
 
+    //insertion
+    trials = 0;
+    step_size = 1.0;
+    accepted_moves = 0;
+    total_accepted_moves = 0;
+    double w = 0;
+
+    ofstream PE_wp("PE_wp.csv");
+    PE_wp << "PE, avg_PE, time" << endl;
+
+    // Record the start time
+    // Start time
+    auto start_time_wp = chrono::system_clock::now();
+    auto start_time_str_wp = chrono::system_clock::to_time_t(start_time_wp);
+
+    for(int j=0; j<num_moves; j++) {
+        mc_move(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, w);  
+        // Record the current time and calculate elapsed time
+        auto current_time_wp = chrono::system_clock::now();
+        chrono::duration<double> elapsed_wp = current_time_wp - start_time_wp;
+        PE_wp << E << " ," << sum_E/total_accepted_moves << " ," << elapsed_wp.count() << endl;
+    }
+
+    //cout << trials << " number of trials " << endl; 
+    // cout << total_trials << " total number of trials " << endl;
+    double acceptance_ratio = static_cast<double>(total_accepted_moves) / num_moves;
+    cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
+    cout << "avg w: " << w/num_moves << endl;
+
+
+    //print start time
+    cout << "Wp Start time: " << put_time(localtime(&start_time_str_wp), "%Y-%m-%d %X") << endl;
+
+    // End time
+    auto end_time_wp = chrono::system_clock::now();
+    auto end_time_str_wp = chrono::system_clock::to_time_t(end_time_wp);
+    cout << "Wp End time: " << put_time(localtime(&end_time_str_wp), "%Y-%m-%d %X") << endl;
+    
+    // Print processing time
+    chrono::duration<double> elapsed_time_wp = end_time_wp - start_time_wp;
+    cout << "Wp Processing time: " << fixed << setprecision(6) << elapsed_time_wp.count() << " seconds" << endl;
+    
 
     return 0;
 }
 
-//distances need to be scaled
-//PE has to be scaled
-//density has to be scaled
-//set the isotherm
-//set the density
 
 
 //analytical vs the code PE
 //equation of state vs the test particle insertion method
 //the pressure of the system must change to accomodate the inserted atom
-//new position is made, not an insertion
 
