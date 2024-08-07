@@ -88,12 +88,12 @@ int main(int argc, char* argv[]) {
     
 
     //print start time
-    cout << "Eq Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
+    //cout << "Eq Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
 
     // End time
     auto end_time = chrono::system_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
-    cout << "Eq End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
+    //cout << "Eq End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
     
     // Print processing time
     chrono::duration<double> elapsed_time = end_time - start_time;
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
     auto start_time_wp = chrono::system_clock::now();
     auto start_time_str_wp = chrono::system_clock::to_time_t(start_time_wp);
 
-    for(int j=0; j<num_moves; j++) {
+    for(int j = 1; j < num_moves+1; j++) {
         mc_move(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, w);  
         // Record the current time and calculate elapsed time
         auto current_time_wp = chrono::system_clock::now();
@@ -127,16 +127,16 @@ int main(int argc, char* argv[]) {
     // cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / num_moves;
     cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
-    cout << "avg w: " << w/num_moves << endl;
+    cout << "avg w: " << w/total_accepted_moves << endl;
 
 
     //print start time
-    cout << "Wp Start time: " << put_time(localtime(&start_time_str_wp), "%Y-%m-%d %X") << endl;
+    //cout << "Wp Start time: " << put_time(localtime(&start_time_str_wp), "%Y-%m-%d %X") << endl;
 
     // End time
     auto end_time_wp = chrono::system_clock::now();
     auto end_time_str_wp = chrono::system_clock::to_time_t(end_time_wp);
-    cout << "Wp End time: " << put_time(localtime(&end_time_str_wp), "%Y-%m-%d %X") << endl;
+    //cout << "Wp End time: " << put_time(localtime(&end_time_str_wp), "%Y-%m-%d %X") << endl;
     
     // Print processing time
     chrono::duration<double> elapsed_time_wp = end_time_wp - start_time_wp;

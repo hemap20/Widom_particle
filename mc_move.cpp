@@ -39,6 +39,7 @@ void mc_move( double e, double beta, double s, vector<vector<double> > box_dim, 
     // Metropolis acceptance criterion
     if (R/4 < exp(-beta * (en_new - en_0))) {
         w += exp(-beta * en_new);
+        cout << "en_new " << en_new << endl;
         accepted_moves++;//register the insertion
         total_accepted_moves++;
         E += en_new - en_0;
