@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& w, double& step_size, int& trials, int& accepted_moves,  int seed, double& E){
+void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& w, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, int seed, double& E){
     int i = rand() % total_n_atoms;
 
     // Calculate the initial energy of atom i
@@ -41,6 +41,7 @@ void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, ve
         w += exp(-beta * en_new);
         // cout << "en_new " << en_new << endl;
         accepted_moves++;//register the insertion
+        total_accepted_moves++;
         E += en_new - en_0;
         
     }

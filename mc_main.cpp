@@ -11,13 +11,14 @@
 #include "random.h"
 #include "output_func.h"
 #include "mc_eq.h"
+#include "pe_total.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
     //(void)argc;
-    if (argc < 7) {
-        cerr << "Usage: " << argv[0] << " <input_name> <output_name> <rc> <kT> <n_insert> <seed>" << endl;
+    if (argc < 6) {
+        cerr << "Usage: " << argv[0] << " <output_name> <total_n_atoms> <T> <rho> <seed>" << endl;
         return 1;  // Exit with error code indicating incorrect usage
     }
 
@@ -26,12 +27,7 @@ int main(int argc, char* argv[]) {
     double T = stod(argv[3]);
     double rho = stod(argv[4]);
     int seed = stoi(argv[5]);
-    //int num_trails = stoi(argv[6]);
-
-    // Start time
-    auto start_time = chrono::high_resolution_clock::now();
-    auto start_time_str = chrono::system_clock::to_time_t(start_time);
-  
+    
 
     // Declare variables
     vector<vector<double> > box_dim(3, vector<double>(3));
@@ -70,14 +66,20 @@ int main(int argc, char* argv[]) {
     double w = 0;
     
     ofstream PE("PE.csv");
-    // Record the start time
-    auto start_time = chrono::high_resolution_clock::now();
     PE << "PE, time" << endl;
+
+    // Record the start time
+    // Start time
+    auto start_time = chrono::system_clock::now();
+    auto start_time_str = chrono::system_clock::to_time_t(start_time);
+
     //equilibration
-    for(int j = 0; j < 5000; j++) {
-        mc_eq(e, beta, s, box_dim, positions, total_n_atoms, w, step_size, trials, accepted_moves, seed, E);  
+    int total_trials = 10000;
+    int total_accepted_moves = 0;
+    for(int j = 0; j < total_trials; j++) {
+        mc_eq(e, beta, s, box_dim, positions, total_n_atoms, w, step_size, trials, accepted_moves, total_accepted_moves, seed, E);  
         // Record the current time and calculate elapsed time
-        auto current_time = chrono::high_resolution_clock::now();
+        auto current_time = chrono::system_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
         PE << E << "," << elapsed.count() << endl;
     }
@@ -88,19 +90,20 @@ int main(int argc, char* argv[]) {
     // cout << total_trials << " total number of trials " << endl;
     // double acceptance_ratio = static_cast<double>(total_accepted_moves) / total_trials;
     // cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
-    cout << "w " << w << endl;
+    cout << "avg w: " << w/total_trials << endl;
     
     //print start time
     cout << "Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
 
     // End time
-    auto end_time = chrono::high_resolution_clock::now();
+    auto end_time = chrono::system_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
     cout << "End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
-
+    
     // Print processing time
     chrono::duration<double> elapsed_time = end_time - start_time;
     cout << "Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
+
 
     return 0;
 }
