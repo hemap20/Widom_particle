@@ -52,8 +52,11 @@ int main(int argc, char* argv[]) {
     const double s_3 = rho*V/(total_n_atoms-1); 
     const double s = pow(s_3, 1.0/3.0); //sigma in Angstrom
 
+    mt19937 gen(seed);
+
     // generate positions
-    generate_positions(positions, total_n_atoms, rho, box_dim);
+    //positions.clear();
+    generate_positions(positions, total_n_atoms, rho, box_dim, gen);
 
     //initial energy
     double E = total_e(e, box_dim, s, positions, total_n_atoms);
@@ -79,7 +82,7 @@ int main(int argc, char* argv[]) {
     int num_eq = 10000;
     int total_accepted_moves = 0;
     for(int j = 1; j < num_eq+1; j++) {
-        mc_eq(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, sum_E);  
+        mc_eq(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, sum_E, gen);  
         // Record the current time and calculate elapsed time
         auto current_time = chrono::system_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
@@ -88,14 +91,9 @@ int main(int argc, char* argv[]) {
         }
     }
     
-
-    //print start time
-    //cout << "Eq Start time: " << put_time(localtime(&start_time_str), "%Y-%m-%d %X") << endl;
-
     // End time
     auto end_time = chrono::system_clock::now();
     auto end_time_str = chrono::system_clock::to_time_t(end_time);
-    //cout << "Eq End time: " << put_time(localtime(&end_time_str), "%Y-%m-%d %X") << endl;
     
     // Print processing time
     chrono::duration<double> elapsed_time = end_time - start_time;
@@ -118,7 +116,7 @@ int main(int argc, char* argv[]) {
     auto start_time_str_wp = chrono::system_clock::to_time_t(start_time_wp);
 
     for(int j = 1; j < num_moves+1; j++) {
-        mc_move(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, w);  
+        mc_move(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, w, gen);  
         // Record the current time and calculate elapsed time
         auto current_time_wp = chrono::system_clock::now();
         chrono::duration<double> elapsed_wp = current_time_wp - start_time_wp;
@@ -127,18 +125,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    //cout << trials << " number of trials " << endl; 
-    // cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / num_moves;
     cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
     double avg_w =  w/total_accepted_moves;
 
     double mu_excess = -log(avg_w/total_n_atoms)/beta;
     cout << "mu_excess: " << mu_excess << endl;
-
-
-    //print start time
-    //cout << "Wp Start time: " << put_time(localtime(&start_time_str_wp), "%Y-%m-%d %X") << endl;
 
     // End time
     auto end_time_wp = chrono::system_clock::now();
@@ -149,13 +141,18 @@ int main(int argc, char* argv[]) {
     chrono::duration<double> elapsed_time_wp = end_time_wp - start_time_wp;
     cout << "Wp Processing time: " << fixed << setprecision(6) << elapsed_time_wp.count() << " seconds" << endl;
     
-
     return 0;
 }
-
-
 
 //analytical vs the code PE
 //equation of state vs the test particle insertion method
 //the pressure of the system must change to accomodate the inserted atom
+
+//case study 7: equation of state of LJ fluid
+//case study 15: widom particle insertion method
+//3.3.2 Technical details 63
+//5.1.5 Pressure 130
+
+
+
 

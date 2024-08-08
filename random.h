@@ -15,6 +15,6 @@ struct Coordinates {
 
 extern set<double> generatedDoubles;
 
-Coordinates random(vector<vector<double> >& box_dim, double step_size);
+Coordinates random(vector<vector<double> >& box_dim, double step_size, mt19937& gen);
 
 #endif

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, int seed, double& E, double& sum_E){
+void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, double& E, double& sum_E, mt19937& gen){
     int i = rand() % total_n_atoms;
 
     // Calculate the initial energy of atom i
@@ -19,7 +19,7 @@ void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, ve
     double z_old = positions[i][2];
 
     // Generate a newpositions position for atom i
-    Coordinates new_pos = random(box_dim, step_size);
+    Coordinates new_pos = random(box_dim, step_size, gen);
     double x_new = new_pos.x;
     double y_new = new_pos.y;
     double z_new = new_pos.z;        
@@ -32,14 +32,14 @@ void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, ve
     double en_new = e_i(0, e, box_dim, s, positions, i, total_n_atoms);
 
     uniform_real_distribution<> dis_real(0.0, 1.0);
-    mt19937 gen(seed);
+    //mt19937 gen(seed);
     double R = dis_real(gen);
 
     // Metropolis acceptance criterion
-    if (R/4 < exp(-beta * (en_new - en_0))) {
+    if ((R < exp(-beta * (en_new - en_0)))) {
         // Accept the move, position is already updated
         //w += exp(-beta * en_new);
-        // cout << "en_new " << en_new << endl;
+        //cout << "en_new " << en_new << endl;
         accepted_moves++;//register the insertion
         total_accepted_moves++;
         E += en_new - en_0;

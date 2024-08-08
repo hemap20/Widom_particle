@@ -9,14 +9,14 @@
 using namespace std;
 
 
-void generate_positions(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim) {
+void generate_positions(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim, mt19937& gen) {
     // Assuming a cubic volume for simplicity
     double Lx = box_dim[0][0];
     double Ly = box_dim[1][1];
     double Lz = box_dim[2][2];
 
-    random_device rd;
-    mt19937 gen(rd());
+    //random_device rd;
+    //mt19937 gen(rd());
     uniform_real_distribution<> dis_x(0.0, Lx);
     uniform_real_distribution<> dis_y(0.0, Ly);
     uniform_real_distribution<> dis_z(0.0, Lz);
