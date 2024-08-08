@@ -7,6 +7,7 @@
 #include <cmath>
 #include "pe_i.h"
 #include "random.h"
+#include "pe_total.h"
 #include "mc_eq.h"
 
 using namespace std;

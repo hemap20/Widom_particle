@@ -76,14 +76,16 @@ int main(int argc, char* argv[]) {
     auto start_time_str = chrono::system_clock::to_time_t(start_time);
 
     //equilibration
-    int num_eq = 2000;
+    int num_eq = 10000;
     int total_accepted_moves = 0;
     for(int j = 1; j < num_eq+1; j++) {
         mc_eq(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, seed, E, sum_E);  
         // Record the current time and calculate elapsed time
         auto current_time = chrono::system_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
-        PE << E << " ," << sum_E/total_accepted_moves << " ," << elapsed.count() << endl;
+        if (total_accepted_moves!=0){
+            PE << E << " ," << sum_E/total_accepted_moves << " ," << elapsed.count() << endl;
+        }
     }
     
 
@@ -120,14 +122,19 @@ int main(int argc, char* argv[]) {
         // Record the current time and calculate elapsed time
         auto current_time_wp = chrono::system_clock::now();
         chrono::duration<double> elapsed_wp = current_time_wp - start_time_wp;
-        PE_wp << E << " ," << sum_E/total_accepted_moves << " ," << elapsed_wp.count() << endl;
+        if (total_accepted_moves!=0){
+            PE_wp << E << " ," << sum_E/total_accepted_moves << " ," << elapsed_wp.count() << endl;
+        }
     }
 
     //cout << trials << " number of trials " << endl; 
     // cout << total_trials << " total number of trials " << endl;
     double acceptance_ratio = static_cast<double>(total_accepted_moves) / num_moves;
     cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
-    cout << "avg w: " << w/total_accepted_moves << endl;
+    double avg_w =  w/total_accepted_moves;
+
+    double mu_excess = -log(avg_w/total_n_atoms)/beta;
+    cout << "mu_excess: " << mu_excess << endl;
 
 
     //print start time

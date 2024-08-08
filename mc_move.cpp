@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include "pe_i.h"
+#include "pe_total.h"
 #include "random.h"
 #include "mc_eq.h"
 #include "mc_move.h"
@@ -15,22 +16,16 @@ void mc_move( double e, double beta, double s, vector<vector<double> > box_dim, 
     // Calculate the initial energy of atom i
     double en_0 = e_i(0, e, box_dim, s, positions, i, total_n_atoms);
 
-    double x_old = positions[i][0];
-    double y_old = positions[i][1];
-    double z_old = positions[i][2];
-
     // Generate a newpositions position for atom i
     Coordinates new_pos = random(box_dim, step_size);
     double x_new = new_pos.x;
     double y_new = new_pos.y;
     double z_new = new_pos.z;        
     
-    positions[i][0] = x_new;
-    positions[i][1] = y_new;
-    positions[i][2] = z_new;
-
+    positions.push_back({x_new, y_new, z_new});
+    total_n_atoms = total_n_atoms + 1;
     // Calculate the new energy of atom i
-    double en_new = e_i(0, e, box_dim, s, positions, i, total_n_atoms);
+    double en_new = e_i(0, e, box_dim, s, positions, total_n_atoms-1, total_n_atoms);
 
     uniform_real_distribution<> dis_real(0.0, 1.0);
     mt19937 gen(seed);
@@ -39,16 +34,14 @@ void mc_move( double e, double beta, double s, vector<vector<double> > box_dim, 
     // Metropolis acceptance criterion
     if (R/4 < exp(-beta * (en_new - en_0))) {
         w += exp(-beta * en_new);
-        cout << "en_new " << en_new << endl;
+        cout << "w " << w << endl;
         accepted_moves++;//register the insertion
         total_accepted_moves++;
         E += en_new - en_0;
     }
-    
-    positions[i][0] = x_old;
-    positions[i][1] = y_old;
-    positions[i][2] = z_old;
-  
+    positions.pop_back();
+    total_n_atoms = total_n_atoms - 1;
+
     trials++;
     
     double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
