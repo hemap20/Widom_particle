@@ -149,7 +149,6 @@ int main(int argc, char* argv[]) {
     // Print processing time
     chrono::duration<double> elapsed_time_wp = end_time_wp - start_time_wp;
     cout << "Wp Processing time: " << fixed << setprecision(6) << elapsed_time_wp.count() << " seconds" << endl;
-    
     return 0;
 }
 
