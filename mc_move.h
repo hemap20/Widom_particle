@@ -12,6 +12,6 @@
 
 using namespace std;
 
-void mc_move( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, double& E, double& w, mt19937& gen);
+void mc_move( double beta,vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, double& E, double& w, mt19937& gen);
 
 #endif

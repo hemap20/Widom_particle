@@ -8,11 +8,11 @@
 
 using namespace std;
 
-void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, double& E, double& sum_E, mt19937& gen){
+void mc_eq( double beta, vector<vector<double> > box_dim, vector<vector<double> >& positions,int total_n_atoms, double& step_size, int& trials, int& accepted_moves, int& total_accepted_moves, double& E, double& sum_E, mt19937& gen){
     int i = rand() % total_n_atoms;
 
     // Calculate the initial energy of atom i
-    double en_0 = e_i(0, e, box_dim, s, positions, i, total_n_atoms);
+    double en_0 = e_i(0, box_dim,positions, i, total_n_atoms);
 
     double x_old = positions[i][0];
     double y_old = positions[i][1];
@@ -29,18 +29,18 @@ void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, ve
     positions[i][2] = z_new;
 
     // Calculate the new energy of atom i
-    double en_new = e_i(0, e, box_dim, s, positions, i, total_n_atoms);
+    double en_new = e_i(0,box_dim,positions, i, total_n_atoms);
 
     uniform_real_distribution<> dis_real(0.0, 1.0);
     //mt19937 gen(seed);
     double R = dis_real(gen);
 
     // Metropolis acceptance criterion
-    if ((R < exp(-beta * (en_new - en_0)))) {
+    if ((en_new < en_0)||(R < exp(-beta * (en_new - en_0)))) {
         // Accept the move, position is already updated
         //w += exp(-beta * en_new);
         //cout << "en_new " << en_new << endl;
-        accepted_moves++;//register the insertion
+        accepted_moves++; //register the insertion
         total_accepted_moves++;
         E += en_new - en_0;
         sum_E += E;
@@ -56,14 +56,14 @@ void mc_eq( double e, double beta, double s, vector<vector<double> > box_dim, ve
     
     double acceptance_ratio = static_cast<double>(accepted_moves) / trials;
     
-    if (acceptance_ratio < 0.3) {
-        step_size *= 0.9; // Decrease step size
+    if (acceptance_ratio < 0.2) {
+        step_size *= 0.7; // Decrease step size
         // Reset counters
         trials = 0;
         accepted_moves = 0;
         //cout << "Step: " << total_trials << ", Acceptance Ratio: " << acceptance_ratio << endl;
-    } else if (acceptance_ratio > 0.5) {
-        step_size *= 1.1; // Increase step size
+    } else if (acceptance_ratio > 0.4) {
+        step_size *= 1.2; // Increase step size
         // Reset counters
         trials = 0;
         accepted_moves = 0;

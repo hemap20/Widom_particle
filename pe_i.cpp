@@ -5,10 +5,10 @@
 
 using namespace std;
 
-double e_i (int i0, const double e, vector<vector<double> >& box_dim, const double s, const vector<vector<double> >& positions, int i, const int N) {
+double e_i (int i0, vector<vector<double> >& box_dim, const vector<vector<double> >& positions, int i, const int N) {
     int j = 0;
     double pe_i = 0;
-    
+    //*vir = 0.0;
     for(j=i0; j<N; j++){
         //distances between the particles
         if(i!=j){
@@ -26,9 +26,10 @@ double e_i (int i0, const double e, vector<vector<double> >& box_dim, const doub
             r = sqrt(dx*dx + dy*dy + dz*dz);
             double r2 = r * r;
             double r6i = 1.0 / (r2 * r2 * r2);
-            double s_12 = s * s * s * s * s * s * s * s * s * s * s * s;
-            double s_6 = s * s * s * s * s * s;
-            pe_i += 4*e* (s_12*r6i * r6i - s_6*r6i);
+            //double s_12 = s * s * s * s * s * s * s * s * s * s * s * s;
+            //double s_6 = s * s * s * s * s * s;
+            pe_i += 4*(r6i * r6i - r6i);
+            //*vir += 48*(r6i*r6i-0.5*r6i);
         }
     }
     return pe_i;

@@ -9,7 +9,7 @@
 using namespace std;
 
 
-void generate_positions(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim, mt19937& gen) {
+void generate_positions(vector<vector<double> > & positions, int n,  vector<vector<double> >& box_dim, mt19937& gen) {
     // Assuming a cubic volume for simplicity
     double Lx = box_dim[0][0];
     double Ly = box_dim[1][1];

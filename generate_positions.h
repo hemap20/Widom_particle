@@ -10,6 +10,6 @@
 
 using namespace std;
 
-void generate_positions(vector<vector<double> > & positions, int n, double density, vector<vector<double> >& box_dim, mt19937& gen);
+void generate_positions(vector<vector<double> > & positions, int n, vector<vector<double> >& box_dim, mt19937& gen);
 
 #endif

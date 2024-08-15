@@ -5,10 +5,11 @@
 
 using namespace std;
 
-double total_e (const double e, vector<vector<double> >& box_dim, const double s, const vector<vector<double> >& positions, const int N) {
+double total_e (vector<vector<double> >& box_dim, const vector<vector<double> >& positions, const int N, double * vir) {
     int i;
     double pe_t = 0.0;
-    for (i=1; i<N-1; i++) {
+
+    for (i=0; i<N-1; i++) {
         for(int j=i+1; j<N; j++){
             double dx = positions[j][0] - positions[i][0];
             double dy = positions[j][1] - positions[i][1];
@@ -24,11 +25,11 @@ double total_e (const double e, vector<vector<double> >& box_dim, const double s
             r = sqrt(dx*dx + dy*dy + dz*dz);
             double r2 = r * r;
             double r6i = 1.0 / (r2 * r2 * r2);
-            double s_12 = s * s * s * s * s * s * s * s * s * s * s * s;
-            double s_6 = s * s * s * s * s * s;
-            pe_t += 4*e* (s_12*r6i * r6i - s_6*r6i);
+            //double s_12 = s * s * s * s * s * s * s * s * s * s * s * s;
+            //double s_6 = s * s * s * s * s * s;
+            pe_t += 4* (r6i * r6i - r6i);
+            *vir += 48*(r6i*r6i-0.5*r6i);
         }
-        
     }
     return pe_t;
 }

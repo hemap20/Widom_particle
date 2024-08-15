@@ -25,41 +25,41 @@ int main(int argc, char* argv[]) {
 
     string output_name = argv[1];
     int total_n_atoms = stoi(argv[2]);
-    double T = stod(argv[3]);
+    double T = stod(argv[3]); //reduced temp kT/e
     double rho = stod(argv[4]);
     int seed = stoi(argv[5]);
     int num_moves = stoi(argv[6]);
     
-
+    vector<vector<double> > positions(total_n_atoms, vector<double>(3));
+    
+    //const double k = 8.617e-5; // Boltzmann constant in eV/K
+    const double beta = 1/(T); // Inverse temperature
+    //const double e = (k*T)/1.2; // epsilon in eV
+    const double V = total_n_atoms / rho; //red volume
+    //const double s_3 = rho*V/(total_n_atoms-1); 
+    //const double s = pow(s_3, 1.0/3.0); //sigma in Angstrom
+    double vir = 0;
+    
     // Declare variables
-    vector<vector<double> > box_dim(3, vector<double>(3));
-    box_dim[0][0] = 20;
+    vector<vector<double> > box_dim(3, vector<double>(3)); // L/sigma
+    box_dim[0][0] = pow(V,1.0/3.0 );
     box_dim[0][1] = 0;
     box_dim[0][2] = 0;
     box_dim[1][0] = 0;
-    box_dim[1][1] = 20;
+    box_dim[1][1] = pow(V,1.0/3.0 );
     box_dim[1][2] = 0;
     box_dim[2][0] = 0;
     box_dim[2][1] = 0;
-    box_dim[2][2] = 20;  
-    
-    vector<vector<double> > positions(total_n_atoms, vector<double>(3));
-    
-    const double k = 8.617e-5; // Boltzmann constant in eV/K
-    const double beta = 1/(k*T); // Inverse temperature
-    const double e = (k*T)/1.2; // epsilon in eV
-    const double V = box_dim[0][0]*box_dim[1][1]*box_dim[2][2]; 
-    const double s_3 = rho*V/(total_n_atoms-1); 
-    const double s = pow(s_3, 1.0/3.0); //sigma in Angstrom
+    box_dim[2][2] = pow(V,1.0/3.0 );
 
     mt19937 gen(seed);
 
     // generate positions
     //positions.clear();
-    generate_positions(positions, total_n_atoms, rho, box_dim, gen);
+    generate_positions(positions, total_n_atoms, box_dim, gen);
 
     //initial energy
-    double E = total_e(e, box_dim, s, positions, total_n_atoms);
+    double E = total_e(box_dim,positions, total_n_atoms, &vir);
     double sum_E = E;
 
     //print the initial positions
@@ -76,13 +76,13 @@ int main(int argc, char* argv[]) {
     // Record the start time
     // Start time
     auto start_time = chrono::system_clock::now();
-    auto start_time_str = chrono::system_clock::to_time_t(start_time);
+    //auto start_time_str = chrono::system_clock::to_time_t(start_time);
 
     //equilibration
-    int num_eq = 10000;
+    int num_eq = 60000;
     int total_accepted_moves = 0;
     for(int j = 1; j < num_eq+1; j++) {
-        mc_eq(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, sum_E, gen);  
+        mc_eq(beta,box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, sum_E, gen);  
         // Record the current time and calculate elapsed time
         auto current_time = chrono::system_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
@@ -90,15 +90,21 @@ int main(int argc, char* argv[]) {
             PE << E << " ," << sum_E/total_accepted_moves << " ," << elapsed.count() << endl;
         }
     }
-    
+
     // End time
     auto end_time = chrono::system_clock::now();
-    auto end_time_str = chrono::system_clock::to_time_t(end_time);
+    //auto end_time_str = chrono::system_clock::to_time_t(end_time);
     
     // Print processing time
     chrono::duration<double> elapsed_time = end_time - start_time;
     cout << "Eq Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
     print_CONTCAR("EQUBM", total_n_atoms, box_dim, positions);
+
+    //for EoS
+    vir = 0.0;
+    E = total_e(box_dim,positions, total_n_atoms, &vir);
+    sum_E = E;
+    double P = (rho*T) + ((rho*vir)/(3*V));
 
     //insertion
     trials = 0;
@@ -113,10 +119,10 @@ int main(int argc, char* argv[]) {
     // Record the start time
     // Start time
     auto start_time_wp = chrono::system_clock::now();
-    auto start_time_str_wp = chrono::system_clock::to_time_t(start_time_wp);
+    //auto start_time_str_wp = chrono::system_clock::to_time_t(start_time_wp);
 
     for(int j = 1; j < num_moves+1; j++) {
-        mc_move(e, beta, s, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, w, gen);  
+        mc_move(beta, box_dim, positions, total_n_atoms,step_size, trials, accepted_moves, total_accepted_moves, E, w, gen); 
         // Record the current time and calculate elapsed time
         auto current_time_wp = chrono::system_clock::now();
         chrono::duration<double> elapsed_wp = current_time_wp - start_time_wp;
@@ -129,12 +135,15 @@ int main(int argc, char* argv[]) {
     cout << "avg Acceptance Ratio: " << acceptance_ratio << endl;
     double avg_w =  w/total_accepted_moves;
 
-    double mu_excess = -log(avg_w/total_n_atoms)/beta;
+    double mu_excess = -log(avg_w)*T;
     cout << "mu_excess: " << mu_excess << endl;
+
+    cout << "P: " << P << endl;
+    cout << "rho: " << rho << endl;
 
     // End time
     auto end_time_wp = chrono::system_clock::now();
-    auto end_time_str_wp = chrono::system_clock::to_time_t(end_time_wp);
+    //auto end_time_str_wp = chrono::system_clock::to_time_t(end_time_wp);
     //cout << "Wp End time: " << put_time(localtime(&end_time_str_wp), "%Y-%m-%d %X") << endl;
     
     // Print processing time
