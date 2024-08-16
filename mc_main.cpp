@@ -14,6 +14,7 @@
 #include "pe_total.h"
 #include "mc_move.h"
 #include "dist.h"
+#include "forces.h"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ int main(int argc, char* argv[]) {
     int num_moves = stoi(argv[6]);
     
     vector<vector<double> > positions(total_n_atoms, vector<double>(3));
-    vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances
-    
+    vector<tuple<int, int, double, vector<PairwiseDistance> > > pairwise_distances;    
+    vector<tuple<int, double > > pairwise_forces;
     //const double k = 8.617e-5; // Boltzmann constant in eV/K
     const double beta = 1/(T); // Inverse temperature
     //const double e = (k*T)/1.2; // epsilon in eV
@@ -103,7 +104,10 @@ int main(int argc, char* argv[]) {
     print_CONTCAR("EQUBM", total_n_atoms, box_dim, positions);
 
     //generate dist
-    
+    dist(total_n_atoms, positions, box_dim, pairwise_distances);
+    double W = forces(pairwise_distances);
+    cout << "vir from forces: " << W << endl;
+
     //for EoS
     vir = 0.0;
     E = total_e(box_dim,positions, total_n_atoms, &vir);

@@ -21,21 +21,19 @@ void dist(const int& total_n_atoms, vector<vector<double>>& box_dim, vector<vect
                 double dz = positions[j][2] - positions[i][2];
 
                 //PBC: minimum image convention
-                dx = dx - box_dim[0][0]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][0]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][0]*ceil(dz/box_dim[2][2]-0.5);
-                dy = dy - box_dim[0][1]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][1]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][1]*ceil(dz/box_dim[2][2]-0.5);
-                dz = dz - box_dim[0][2]*ceil(dx/box_dim[0][0]-0.5) - box_dim[1][2]*ceil(dy/box_dim[1][1]-0.5) - box_dim[2][2]*ceil(dz/box_dim[2][2]-0.5);
-                
+                dx -= box_dim[0][0] * round(dx / box_dim[0][0]);
+                dy -= box_dim[1][1] * round(dy / box_dim[1][1]);
+                dz -= box_dim[2][2] * round(dz / box_dim[2][2]);
+
                 //distance r
                 double r = 0;
                 r = sqrt(dx*dx + dy*dy + dz*dz);
 
-                //cutoff radius
-                if (r < rc) {
-                    vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
-                    PairwiseDistance pd = { i, j, r, unit_r_vec };
-                    //all the pairs are listed out that have r < rc, repetition is there
-                    pairwise_distances.push_back(make_tuple(i, j, r, vector<PairwiseDistance>{pd}));
-                }
+                vector<double> unit_r_vec = {dx/r, dy/r, dz/r};
+                PairwiseDistance pd = { i, j, r, unit_r_vec };
+                //all the pairs are listed out that have r < rc, repetition is there
+                pairwise_distances.push_back(make_tuple(i, j, r, vector<PairwiseDistance>{pd}));
+                
             }
         }
     }
