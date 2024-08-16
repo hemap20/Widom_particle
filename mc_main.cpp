@@ -13,6 +13,7 @@
 #include "mc_eq.h"
 #include "pe_total.h"
 #include "mc_move.h"
+#include "dist.h"
 
 using namespace std;
 
@@ -101,6 +102,8 @@ int main(int argc, char* argv[]) {
     cout << "Eq Processing time: " << fixed << setprecision(6) << elapsed_time.count() << " seconds" << endl;
     print_CONTCAR("EQUBM", total_n_atoms, box_dim, positions);
 
+    //generate dist
+    
     //for EoS
     vir = 0.0;
     E = total_e(box_dim,positions, total_n_atoms, &vir);
