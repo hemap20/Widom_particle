@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('PE_eq.csv')
+data = pd.read_csv('PE_wp.csv')
 
 time = data.iloc[:,2]
 avg_pe = data.iloc[:,1]
