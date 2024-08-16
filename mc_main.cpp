@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
     int num_moves = stoi(argv[6]);
     
     vector<vector<double> > positions(total_n_atoms, vector<double>(3));
+    vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances
     
     //const double k = 8.617e-5; // Boltzmann constant in eV/K
     const double beta = 1/(T); // Inverse temperature
