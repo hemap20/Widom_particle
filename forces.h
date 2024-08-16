@@ -7,6 +7,9 @@
 #include <cmath>
 #include <tuple>
 #include <map>
+#include "dist.h"
+#include "dist.h"
+
 //include path to pairwise_distance
 
 

@@ -1,5 +1,6 @@
-#include "pot_energy.h"
+//#include "pot_energy.h"
 #include "forces.h"
+#include "dist.h"
 #include <iostream>
 #include <vector>
 #include <cmath>

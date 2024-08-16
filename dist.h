@@ -17,6 +17,6 @@ struct PairwiseDistance {
 };
 
 // Corrected declaration of the dist function
-void dist(const int& total_n_atoms, vector<vector<double>>& box_dim, vector<vector<double>>& positions,vector<tuple<int, int, double, vector<PairwiseDistance>>>& pairwise_distances);
+void dist(const int& total_n_atoms, vector<vector<double> >& box_dim, vector<vector<double> >& positions,vector<tuple<int, int, double, vector<PairwiseDistance> > >& pairwise_distances);
 
 #endif
