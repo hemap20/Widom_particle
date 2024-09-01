@@ -1,0 +1,4 @@
+to find a file: 
+sudo find / -name "file name" 2>/dev/null
+activate the virtual env
+/Users/hemapunyamoorty/VS\ Code\ projects/Basics/Basics/.venv/bin/activate
