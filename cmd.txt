@@ -1,4 +1,12 @@
-to find a file: 
+###to find a file: 
 sudo find / -name "file name" 2>/dev/null
-activate the virtual env
+
+###activate the virtual env
 /Users/hemapunyamoorty/VS\ Code\ projects/Basics/Basics/.venv/bin/activate
+
+###make the local rep same as remote rep
+git fetch origin
+git reset --hard origin/branch_name
+
+###make the remote rep same as  local
+git push origin branch_name --force
